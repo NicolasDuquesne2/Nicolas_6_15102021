@@ -4,21 +4,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/index.css">
     <script src="javascript/index.js" defer></script>
     <title>Fisheye : trouver un photographe</title>
 </head>
 <body>
     <div class="main-wrapper">
         <header class="main-header" role="banner">
-            <a href="index.html" class="title-link"></a>
-            <nav class="main-nav" role="navigation" aria-label="photogrpaher categories">
-    
+            <a href="index.html" class="title-link">
+                <img src="media/logo/logo.svg" alt="Fisheye Home page">
+            </a>
+            <nav class="main-index-nav" role="navigation" aria-label="photogrpaher categories" id="main-nav">
+                <ul class="tags-list" id="main-tags-list">
+                </ul>
             </nav>
         </header>
         <main>
+            <div class="blanc-wrapper"></div>
             <h1 class="main-title" aria-label="Our photographers">nos photographes</h1>
             <div class="cards-wrapper">
-
+                <div class="card-wrapper">
+                    <a href="photographer.html" class="profile-link">
+                        <img src="media/img/Photographers ID Photos/MimiKeel.jpg" alt="Mimi Keel" class="profile-img-big">
+                        <h2 class="profile-card-title">mimi keel</h2>
+                    </a>
+                    <div class="card-text">
+                        <p class="profile-loc-text">London, UK</p>
+                        <p class="profile-tagline">voir le beau dans le quotidien</p>
+                        <p class="profile-price">400€/jour</p>
+                    </div>
+                    <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
+                        <ul class="tags-list">
+                            <li><a href="index.html" class="lower-tag-link"><span aria-label="tag">#portrait</span></a></li>
+                            <li><a href="index.html" class="lower-tag-link"><span aria-label="tag">#events</span></a></li>
+                            <li><a href="index.html" class="lower-tag-link"><span aria-label="tag">#travels</span></a></li>
+                            <li><a href="index.html" class="lower-tag-link"><span aria-label="tag">#animal</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </main>
     </div>
