@@ -23,6 +23,8 @@
 .main-header {
     display: flex;
     flex-direction: row;
+    position: absolute;
+    z-index: 2;
     justify-content: space-between;
     width: 65%;
     padding-top: 45px;
@@ -30,9 +32,6 @@
     height: 200px;
 }
 
-.main-header img {
-
-}
 
 .main-index-nav {
     display: flex;
@@ -90,12 +89,31 @@ main {
 }
 
 .cards-wrapper {
+    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .card-wrapper {
+    display: flex;
+    width: 33.33%;
+    margin-bottom: 50px;
+}
+
+.card-wrapper:nth-child(3n+1) {
+    justify-content: left;
+}
+
+.card-wrapper:nth-child(3n+2) {
+    justify-content: center;
+}
+
+.card-wrapper:nth-child(3n+3) {
+    justify-content: right;
+}
+
+.card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

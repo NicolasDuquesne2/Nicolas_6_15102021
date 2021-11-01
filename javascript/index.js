@@ -20,14 +20,42 @@ function printTags(objects) {
   tagHtmlUl.innerHTML = tagHtmlModel;
 }
 
+/* print cards displays cards model in the html with datas */
+
+function printCards(objects) {
+  const cardsWrapper = document.querySelector('.cards-wrapper');
+  let cardhtmlModel = '';
+  objects.forEach((element) => {
+    cardhtmlModel += `<div class="card-wrapper">
+                        <div class="card">
+                            <a href="photographer.html" class="profile-link">
+                                <img src="media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
+                                <h2 class="profile-card-title">${element.name}</h2>
+                            </a>
+                            <div class="card-text">
+                                <p class="profile-loc-text">${element.city}, ${element.country}</p>
+                                <p class="profile-tagline">${element.tagline}</p>
+                                <p class="profile-price">${element.price}€/jour</p>
+                            </div>
+                            <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
+                                <ul class="tags-list">`;
+    element.tags.forEach((tag) => {
+      cardhtmlModel += `<li><a href="index.html" class="lower-tag-link"><span aria-label="${tag}">#${tag}</span></a></li>`;
+    });
+
+    cardhtmlModel += '</ul></nav></div></div>';
+  });
+  cardsWrapper.innerHTML = cardhtmlModel;
+}
+
 /* lauches the display process according type given */
 function printObjects(objects, type) {
   switch (type) {
     case 'tags':
       printTags(objects);
       break;
-    case 'photographers':
-      //printPhotographers(objects);
+    case 'cards':
+      printCards(objects);
       break;
     default:
   }
@@ -39,7 +67,7 @@ async function displayDynamics(url) {
     const objects = await response.json();
     const tags = mergeArraysAndGetUnique(objects.photographers);
     printObjects(tags, 'tags');
-    //printObjects(objects.photographers, 'photographers');
+    printObjects(objects.photographers, 'cards');
   } catch (error) {
     alert(error.message);
   }
@@ -47,4 +75,3 @@ async function displayDynamics(url) {
 }
 
 displayDynamics('./db/photographers.json');
-console.log('LUL');
