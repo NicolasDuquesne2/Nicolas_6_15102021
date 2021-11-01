@@ -15,7 +15,7 @@ function printTags(objects) {
   const tagHtmlUl = document.querySelector('#main-tags-list');
   let tagHtmlModel = '';
   objects.forEach((element) => {
-    tagHtmlModel += `<li><a href="index.html" class="main-tag-link"><span aria-label="${element}">#${element}</span></a></li>`;
+    tagHtmlModel += `<li><a href="html/hashtags/${element}.html" class="main-tag-link"><span aria-label="${element}">#${element}</span></a></li>`;
   });
   tagHtmlUl.innerHTML = tagHtmlModel;
 }
@@ -40,7 +40,7 @@ function printCards(objects) {
                             <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
                                 <ul class="tags-list">`;
     element.tags.forEach((tag) => {
-      cardhtmlModel += `<li><a href="index.html" class="lower-tag-link"><span aria-label="${tag}">#${tag}</span></a></li>`;
+      cardhtmlModel += `<li><a href="html/hashtags/${element.tag}.html" class="lower-tag-link"><span aria-label="${tag}">#${tag}</span></a></li>`;
     });
 
     cardhtmlModel += '</ul></nav></div></div>';
