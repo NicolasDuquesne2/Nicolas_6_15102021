@@ -1,4 +1,5 @@
 /* At loading page */
+let photographersArray = [];
 
 /* merges arrays from objects and returns an array with unique values */
 function mergeArraysAndGetUnique(objects) {
@@ -10,12 +11,32 @@ function mergeArraysAndGetUnique(objects) {
   return uniqueArray;
 }
 
+/* filterByTag filters photographers by tag */
+
+function filterByTag(tag) {
+  const filtPhotoArr = photographersArray.filter((photographer) => photographer.tags.includes(tag));
+  printCards(filtPhotoArr);
+}
+
+/* addEventList adds event listener to html elements */
+
+function addEventList(clas, events) {
+  const tagElements = document.querySelectorAll(clas);
+  tagElements.forEach((tag) => {
+    events.forEach((evt) => {
+      tag.addEventListener(evt, (e) => {
+        filterByTag(e.currentTarget.id);
+      });
+    });
+  });
+}
+
 /* printTags displays tags model in the html with datas */
 function printTags(objects) {
   const tagHtmlUl = document.querySelector('#main-tags-list');
   let tagHtmlModel = '';
-  objects.forEach((element) => {
-    tagHtmlModel += `<li><a href="html/hashtags/${element}.html" class="main-tag-link"><span aria-label="${element}">#${element}</span></a></li>`;
+  objects.forEach((element, index) => {
+    tagHtmlModel += `<li class="photographer-tag" id=${element} tabindex=${index}><span aria-label="${element}">#${element}</span></li>`;
   });
   tagHtmlUl.innerHTML = tagHtmlModel;
 }
@@ -28,7 +49,7 @@ function printCards(objects) {
   objects.forEach((element) => {
     cardhtmlModel += `<div class="card-wrapper">
                         <div class="card">
-                            <a href="photographer.html" class="profile-link">
+                            <a href="photographer.html?PhotographerId=${element.id}&name=${element.name}" class="profile-link">
                                 <img src="media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
                                 <h2 class="profile-card-title">${element.name}</h2>
                             </a>
@@ -40,12 +61,12 @@ function printCards(objects) {
                             <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
                                 <ul class="tags-list">`;
     element.tags.forEach((tag) => {
-      cardhtmlModel += `<li><a href="html/hashtags/${element.tag}.html" class="lower-tag-link"><span aria-label="${tag}">#${tag}</span></a></li>`;
+      cardhtmlModel += `<li class="photographer-tag" id=${tag}><span aria-label="${tag}">#${tag}</span></li>`;
     });
-
     cardhtmlModel += '</ul></nav></div></div>';
   });
   cardsWrapper.innerHTML = cardhtmlModel;
+  addEventList('.photographer-tag', ['click', 'keypress']);
 }
 
 /* lauches the display process according type given */
@@ -65,9 +86,11 @@ async function displayDynamics(url) {
   try {
     const response = await fetch(url);
     const objects = await response.json();
-    const tags = mergeArraysAndGetUnique(objects.photographers);
+    photographersArray = [...objects.photographers];
+    const tags = mergeArraysAndGetUnique(photographersArray);
     printObjects(tags, 'tags');
     printObjects(objects.photographers, 'cards');
+    addEventList('.photographer-tag', ['click', 'keypress']);
   } catch (error) {
     alert(error.message);
   }
