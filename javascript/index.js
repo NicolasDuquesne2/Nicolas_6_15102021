@@ -97,4 +97,19 @@ async function displayDynamics(url) {
   return true;
 }
 
+/* observer is used to display the button to return on the top of the main
+if the main title is not visible yet.
+The button disappear when the title is visible  */
+
+const observer = new IntersectionObserver((entries) => {
+  const mainAnchorWrapper = document.querySelector('.main-anchor-wrapper');
+  if (!entries[0].isIntersecting) {
+    mainAnchorWrapper.style.display = 'flex';
+  } else {
+    mainAnchorWrapper.style.display = 'none';
+  }
+}, { threshold: [0] });
+
 displayDynamics('./db/photographers.json');
+
+observer.observe(document.querySelector('#main'));
