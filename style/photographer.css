@@ -1,0 +1,36 @@
+:root {
+    --font-default: "DM Sans", Arial, Helvetica, sans-serif;
+    --primary-font-color: #D3573C;
+    --second-font-color: #911c1c;
+    --primary-border-color: #C4C4C4;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 40px;
+    
+}
+
+.main-header {
+    width: 100%;
+}
+
+.title-link {
+    width: 150px;
+    height: 37px;
+}
+
+.title-link  img {
+    width: inherit;
+    height: inherit;
+}
