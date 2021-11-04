@@ -49,7 +49,7 @@ function printCards(objects) {
   objects.forEach((element) => {
     cardhtmlModel += `<div class="card-wrapper">
                         <div class="card">
-                            <a href="photographer.html?PhotographerId=${element.id}&name=${element.name}" class="profile-link">
+                            <a href="photographer.html?id=${element.id}&name=${element.name}" class="profile-link">
                                 <img src="media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
                                 <h2 class="profile-card-title">${element.name}</h2>
                             </a>
@@ -103,13 +103,13 @@ The button disappear when the title is visible  */
 
 const observer = new IntersectionObserver((entries) => {
   const mainAnchorWrapper = document.querySelector('.main-anchor-wrapper');
-  if (!entries[0].isIntersecting) {
-    mainAnchorWrapper.style.display = 'flex';
+  if (entries[0].intersectionRatio === 0) {
+    mainAnchorWrapper.classList.remove('not-visible');
   } else {
-    mainAnchorWrapper.style.display = 'none';
+    mainAnchorWrapper.classList.add('not-visible');
   }
 }, { threshold: [0] });
 
 displayDynamics('./db/photographers.json');
 
-observer.observe(document.querySelector('#main'));
+observer.observe(document.querySelector('.main-title'));

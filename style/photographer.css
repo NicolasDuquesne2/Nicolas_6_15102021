@@ -2,6 +2,7 @@
     --font-default: "DM Sans", Arial, Helvetica, sans-serif;
     --primary-font-color: #D3573C;
     --second-font-color: #911c1c;
+    --third-font-color: #757575;
     --primary-border-color: #C4C4C4;
 }
 
@@ -33,4 +34,153 @@
 .title-link  img {
     width: inherit;
     height: inherit;
+}
+
+main {
+    margin-top: 20px;
+}
+
+.card-wrapper {
+    margin-bottom: 20px;
+}
+
+.id-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-button {
+    display: none;
+}
+
+.tags-list {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content: flex-start;
+}
+
+
+.profile-img-big {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 5px var(--primary-border-color);
+}
+
+.profile-card-title {
+    text-transform: capitalize;
+    color: var(--primary-font-color);
+    font-weight: 400;
+    font-size: 36px;
+    margin-top: 15px;
+    letter-spacing: 1px;
+}
+
+.profile-loc-text {
+    text-transform: capitalize;
+    color: var(--second-font-color);
+    font-size: 13px;
+    margin: 2px 0;
+}
+
+.profile-tagline {
+    text-transform: capitalize;
+    font-size: 13px;
+    color: var(--third-font-color);
+    margin: 2px 0;
+}
+
+.profile-price {
+    text-transform: capitalize;
+    font-size: 13px;
+    color: var(--primary-border-color);
+}
+
+.profile-index-nav  li {
+    margin-right:  2px;
+}
+
+.photographer-tag {
+    display: flex;
+    align-items: center;
+    border: 0.5px solid var(--primary-border-color);
+    border-radius: 11px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    text-decoration: none;
+}
+
+.photographer-tag > span{
+    font-size: 12px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: var( --second-font-color);
+    cursor: pointer;
+}
+
+.sort-wrapper {
+    display: none;
+}
+
+.media-wrapper {
+    margin-bottom: 10px;
+}
+
+.gallery-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    object-position: 50% 40%;
+}
+
+.gallery-video {
+    width: 100%;
+    height: 190px;
+}
+
+.media-text-wrapper {
+    display: flex;
+    padding: 5px 0;
+    color: var(--second-font-color);
+}
+
+.media-title {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    font-size: 14px;
+    
+}
+
+.media-price {
+    display: flex;
+    align-items: center;
+    width: 6%;
+    font-size: 12px;
+    font-weight:600;
+    letter-spacing: 1px;
+}
+
+.likes-text {
+    display: flex;
+    font-size: 14px;
+    font-weight: 600;
+    justify-content: flex-end;
+    align-items: center;
+    width: 15%;
+}
+
+.fa-heart {
+    font-size: 12px;
+    margin-left: 3px;
 }

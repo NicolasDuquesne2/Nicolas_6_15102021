@@ -1,70 +1,89 @@
 /* At loading page */
 
-/* merges arrays from objects and returns an array with unique values */
-function mergeArraysAndGetUnique(objects) {
-  let uniqueArray = [];
-  objects.forEach((element) => {
-    const tagsArray = element.tags;
-    uniqueArray = Array.from(new Set(uniqueArray.concat(tagsArray)));
-  });
-  return uniqueArray;
-}
+let photographerId = '';
+let photographerName = '';
 
 /* filterObjectsByTag returns objects */
 
-function filterObjectsByTag(objects, tag) {
-  const objectsSelected = { photographers: [] };
-  objects.forEach((element) => {
-    const filterTags = element.tags.filter((t) => t === tag);
-    if (filterTags.length > 0) {
-      objectsSelected.photographers.push(element);
-    }
-  });
-  return objectsSelected;
+function filterObjectsById(objects, id, property) {
+  const filtPhotoArr = objects.filter((object) => object[property] === Number(id));
+  return filtPhotoArr;
 }
 
-/* printTags displays tags model in the html with datas */
+function createMediaHtml(type, object) {
+  return {
+    build() {
+      let htmlObject = '';
+      const photographName = photographerName.split(' ');
+      htmlObject += '<div class="media-wrapper">';
+      switch (type) {
+        case 'image':
+          htmlObject += `<img class="gallery-image" src="./media/img/${photographName[0]}/${object.image}">`;
+          break;
+        case 'video':
+          htmlObject += `<${type} class="gallery-video" controls>
+                            <source src="./media/video/${photographName[0]}/${object.video}">
+                         </${type}>`;
+          break;
+        default:
+      }
+      htmlObject += `<div class="media-text-wrapper">
+                        <p class="media-title">${object.title}</p>
+                        <p class="media-price">${object.price}€</p>
+                        <p class="likes-text">${object.likes}<i class="fas fa-heart" aria-label="likes"></i></p
+                     </div>
+                  </div>`;
+      return htmlObject;
+    },
+  };
+}
 
-function printTags(objects) {
-  const tagHtmlUl = document.querySelector('#main-tags-list');
-  let tagHtmlModel = '';
+/* printMedias */
+
+function printMedias(objects) {
+  const mediasWrapper = document.querySelector('.medias-wrapper');
   objects.forEach((element) => {
-    tagHtmlModel += `<li><a href="../../html/hashtags/${element}.html" class="main-tag-link"><span aria-label="${element}">#${element}</span></a></li>`;
+    let type = '';
+    if (element.image) {
+      type = 'image';
+    } else if (element.video) {
+      type = 'video';
+    }
+    const htmlMedia = createMediaHtml(type, element);
+    mediasWrapper.innerHTML += htmlMedia.build();
   });
-  tagHtmlUl.innerHTML = tagHtmlModel;
 }
 
 /* print cards displays cards model in the html with datas */
 
 function printCards(objects) {
-  const cardsWrapper = document.querySelector('.cards-wrapper');
+  const cardsWrapper = document.querySelector('.card-wrapper');
   let cardhtmlModel = '';
   objects.forEach((element) => {
-    cardhtmlModel += `<div class="card-wrapper">
+    cardhtmlModel += `<div class="id-wrapper">
                           <div class="card">
-                              <a href="photographer.html" class="profile-link">
-                                  <img src="../../media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
-                                  <h2 class="profile-card-title">${element.name}</h2>
-                              </a>
-                              <div class="card-text">
-                                  <p class="profile-loc-text">${element.city}, ${element.country}</p>
-                                  <p class="profile-tagline">${element.tagline}</p>
-                                  <p class="profile-price">${element.price}€/jour</p>
-                              </div>
+                              <h2 class="profile-card-title">${element.name}</h2>
+                              <p class="profile-loc-text">${element.city}, ${element.country}</p>
+                              <p class="profile-tagline">${element.tagline}</p>
                               <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
                                   <ul class="tags-list">`;
     element.tags.forEach((tag) => {
-      cardhtmlModel += `<li><a href="html/hashtags/${element.tag}.html" class="lower-tag-link"><span aria-label="${tag}">#${tag}</span></a></li>`;
+      cardhtmlModel += `<li><a href="./index.html?tag=${tag}" class="photographer-tag"><span aria-label="${tag}">#${tag}</span></a></li>`;
     });
-    cardhtmlModel += '</ul></nav></div></div>';
+    cardhtmlModel += `</ul>
+                </nav>
+          </div>
+          <button class="modal-button"><span>c<span>ontactez-moi</button>
+          <img src="./media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
+    </div>`;
   });
   cardsWrapper.innerHTML = cardhtmlModel;
 }
 /* lauches the display process according type given */
 function printObjects(objects, type) {
   switch (type) {
-    case 'tags':
-      printTags(objects);
+    case 'medias':
+      printMedias(objects);
       break;
     case 'cards':
       printCards(objects);
@@ -73,53 +92,29 @@ function printObjects(objects, type) {
   }
 }
 
-async function displayDynamics(url, tag) {
+async function displayDynamics(url, id) {
   try {
     const response = await fetch(url);
     const objects = await response.json();
-    const tags = mergeArraysAndGetUnique(objects.photographers);
-    const photographersByTag = filterObjectsByTag(objects.photographers, tag);
-    printObjects(tags, 'tags');
-    printObjects(photographersByTag.photographers, 'cards');
+    const photographersById = filterObjectsById(objects.photographers, id, 'id');
+    const mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
+    printObjects(photographersById, 'cards');
+    printObjects(mediasByPhotogId, 'medias');
   } catch (error) {
     alert(error.message);
   }
   return true;
 }
 
-/* regex function */
-
-function regexTest(string, pattern) {
-  const regex = new RegExp(pattern);
-  return regex.test(string);
-}
-
-/* check the url right pattern and returns true or false */
-
-function testUrl(url) {
-  const pattern = '(html\\/hashtags\\/)([a-z]+.html)';
-  const regexResult = regexTest(url, pattern);
-  return regexResult;
-}
-
-/* getTagByUrl returns the tag within the url */
-
-function getTagByUrl(url) {
-  const tag = url.match('(html\\/hashtags\\/)([a-z]+).html');
-  return tag[2];
-}
-
-const currentUrl = document.location.href;
-const queryString_URL_Id = window.location.search;
-const searchParamsId = new URLSearchParams(queryString_URL_Id);
-const urlId = searchParamsId.get('id');
-const urlName = searchParamsId.get('name');
-
-
 function run() {
-  if (testUrl(currentUrl)) {
-    const tag = getTagByUrl(currentUrl);
-    displayDynamics('../../db/photographers.json', tag);
+  try {
+    const queryStringUrlId = window.location.search;
+    const searchParamsId = new URLSearchParams(queryStringUrlId);
+    photographerId = searchParamsId.get('id');
+    photographerName = searchParamsId.get('name');
+    displayDynamics('./db/photographers.json', photographerId);
+  } catch (error) {
+    alert(error.message);
   }
 }
 

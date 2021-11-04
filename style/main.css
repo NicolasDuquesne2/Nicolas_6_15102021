@@ -14,19 +14,27 @@
 
 
 .main-anchor-wrapper {
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
-    position: sticky;
-    top: 10px;
+    position:sticky;
+    top: 10%;
+    left: calc(50% - 60px);
     width: 120px;
     height: 25px;
-    margin: auto;
     z-index: 2;
     background: var(--second-bg-color);
     border: 0 none none;
     border-radius: 5px;
+    opacity: 1;
+    transform: scaleX(1);
+    transition: all 200ms ease-out;
 }
+
+.main-anchor-wrapper.not-visible {
+    opacity: 0;
+    transform: scaleX(0);
+}   
 
 .main-anchor {
     text-decoration: none;
@@ -84,7 +92,7 @@
     flex-direction: row;
     list-style-type: none;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -95,6 +103,7 @@
     border-radius: 11px;
     padding: 1px 5px;
     margin-bottom: 6px;
+    margin-right: 3px;
 }
 
 .photographer-tag > span{
@@ -108,12 +117,19 @@
 
 main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: flex-start;
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
     width: 100%;
 }
 
@@ -125,7 +141,7 @@ main {
 .main-title {
     display: flex;
     justify-content: flex-end;
-    padding-top: 50px;
+    padding-top: 25px;
     width: 50%;
     font-size: 1em;
     height: 200px;
@@ -172,6 +188,7 @@ main {
     border-radius: 50%;
     border-style: none;
     object-fit: cover;
+    box-shadow: 0 2px 5px var(--primary-border-color);
 }
 
 .profile-card-title {
@@ -196,7 +213,6 @@ main {
 }
 
 .profile-tagline {
-    text-transform: capitalize;
     font-size: 10px;
 }
 
@@ -221,6 +237,12 @@ main {
 
 
 @media screen and (min-width: 630px) {
+    
+    .main-title {
+        font-size: 1.5em;
+        padding-top: 14px;
+    }
+    
     .card-wrapper {
         display: flex;
         width: 50%;
@@ -271,12 +293,8 @@ main {
     }
         
     .tags-list {
-        justify-content: space-between;
-        flex-wrap: nowrap;
-    }
-    
-    .photographer-tag {
-        margin-bottom: unset;
+        justify-content: center;
+        flex-wrap: wrap;
     }
     
     .blanc-wrapper {
@@ -344,7 +362,7 @@ main {
     }
 
     .main-title {
-        padding-top: 42px;
+        padding-top: 14px;
         height: 200px;
         justify-content: flex-start;
     }
