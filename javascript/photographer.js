@@ -10,6 +10,9 @@ function filterObjectsById(objects, id, property) {
   return filtPhotoArr;
 }
 
+/* createMediaHtml creates the right html according the type of object.
+Returns a html object to build */
+
 function createMediaHtml(type, object) {
   return {
     build() {
@@ -38,7 +41,7 @@ function createMediaHtml(type, object) {
   };
 }
 
-/* printMedias */
+/* printMedias build images or videos with calling the object factory createMediaHtml */
 
 function printMedias(objects) {
   const mediasWrapper = document.querySelector('.medias-wrapper');
@@ -73,13 +76,12 @@ function printCards(objects) {
     cardhtmlModel += `</ul>
                 </nav>
           </div>
-          <button class="modal-button"><span>c<span>ontactez-moi</button>
           <img src="./media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
     </div>`;
   });
   cardsWrapper.innerHTML = cardhtmlModel;
 }
-/* lauches the display process according type given */
+/* launches the display process according type given */
 function printObjects(objects, type) {
   switch (type) {
     case 'medias':
@@ -91,6 +93,10 @@ function printObjects(objects, type) {
     default:
   }
 }
+
+/* main displaying function. gets the json file, parse it into js objects,
+get photographer by id and medias belonging to the photographer
+launches prints */
 
 async function displayDynamics(url, id) {
   try {
@@ -106,6 +112,46 @@ async function displayDynamics(url, id) {
   return true;
 }
 
+/* modifyClassAttrList lets adding or removing class attribute */
+
+function modifyClassAttrList(object, modifOption, atrr) {
+  switch (modifOption) {
+    case 'add':
+      object.classList.add(atrr);
+      break;
+    case 'remove':
+      object.classList.remove(atrr);
+      break;
+    default:
+  }
+}
+
+/* addEventList adds event listener to html elements for the modifyClassAttrList function */
+
+function addEventList(object, evts, params) {
+  evts.forEach((evt) => {
+    object.addEventListener(evt, () => {
+      modifyClassAttrList(params[0], params[1], params[2]);
+    });
+  });
+}
+
+/* setObserver let to add or remove class attribute on modified html
+from observee's viewing degree  */
+
+function setObserver(observee, modified, modificator) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio === 0) {
+      modified.classList.remove(modificator);
+    } else {
+      modified.classList.add(modificator);
+    }
+  }, { threshold: [0] });
+  observer.observe(observee);
+}
+
+/* the primary runing function. all loading page routines are here */
+
 function run() {
   try {
     const queryStringUrlId = window.location.search;
@@ -113,6 +159,13 @@ function run() {
     photographerId = searchParamsId.get('id');
     photographerName = searchParamsId.get('name');
     displayDynamics('./db/photographers.json', photographerId);
+    const cardWrapper = document.querySelector('.card-wrapper');
+    const modalButton = document.querySelector('.modal-button');
+    const modal = document.querySelector('.form-wrapper');
+    const closeModal = document.querySelector('.form-close');
+    setObserver(cardWrapper, modalButton, 'not-visible');
+    addEventList(modalButton, ['click', 'keypress'], [modal, 'remove', 'not-visible']);
+    addEventList(closeModal, ['click', 'keypress'], [modal, 'add', 'not-visible']);
   } catch (error) {
     alert(error.message);
   }

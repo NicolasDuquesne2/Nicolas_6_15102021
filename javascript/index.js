@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* At loading page */
 let photographersArray = [];
 
