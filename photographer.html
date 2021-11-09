@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="javascript/photographer.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c24d3f9bea.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style/photographer.css">
     <title></title>
@@ -21,12 +22,15 @@
             </div>
             <button class="modal-button" type="button">Contactez-moi</button>
             <div class="sort-wrapper">
-                <label for="Order by"><span>trier</span>&nbsp;par</label>
-                <select name="Order by" id="sort-select">
-                    <option value="fame">Popularité</option>
-                    <option value="date">Date</option>
-                    <option value="titel">Titre</option>
-                </select>
+                <p class=" sort-wrapper-label">Trier par</p>
+                <div class="select" tabindex="0" onfocus="return onSortFocus(event)" onblur="return onSortBlur(event)">
+                    <input class="options-select" name="selectors" type="radio" id="opt1" checked>
+                    <label for="opt1" class="option">Popularité</label>
+                    <input class="options-select" name="selectors" type="radio" id="opt2">
+                    <label for="opt2" class="option">Date</label>
+                    <input class="options-select" name="selectors" type="radio" id="opt3">
+                    <label for="opt3" class="option">Titre</label>
+                </div>
             </div>
             <div class="medias-wrapper">
 
@@ -38,11 +42,11 @@
                 </header>
                 <form action="" class="contact-form">
                     <label for="first-name" class="form-label">Prénom</label>
-                    <input type="text" name="First name" id="" class="text-input">
+                    <input type="text" name="First name" id="" class="text-input" onchange="">
                     <label for="Last name" class="form-label">Nom</label>
-                    <input type="text" name="Last name" id="" class="text-input">
+                    <input type="text" name="Last name" id="" class="text-input" onchange="">
                     <label for="Email" class="form-label">Email</label>
-                    <input type="email" name="Email" id="" class="text-input">
+                    <input type="email" name="Email" id="" class="text-input" onchange="">
                     <label for="Your message" class="form-label">Votre message</label>
                     <textarea name="Your message" id="" class="text-aera"></textarea>
                     <button type="submit" class="submit-button">Envoyer</button>

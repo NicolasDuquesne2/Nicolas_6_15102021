@@ -12,6 +12,9 @@
     padding: 0;
 }
 
+body {
+    font-family: var(--font-default);
+}
 
 .main-anchor-wrapper {
     display: flex;

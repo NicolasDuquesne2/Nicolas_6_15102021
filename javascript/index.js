@@ -15,8 +15,14 @@ function mergeArraysAndGetUnique(objects) {
 /* filterByTag filters photographers by tag */
 
 function filterByTag(tag) {
-  const filtPhotoArr = photographersArray.filter((photographer) => photographer.tags.includes(tag));
-  printCards(filtPhotoArr);
+  return photographersArray.filter((photographer) => photographer.tags.includes(tag));
+}
+
+/* displayByTag */
+
+function displayByTag(tag) {
+  const photographersByTag = filterByTag(tag);
+  printCards(photographersByTag);
 }
 
 /* addEventList adds event listener to html elements */
@@ -26,7 +32,7 @@ function addEventList(clas, events) {
   tagElements.forEach((tag) => {
     events.forEach((evt) => {
       tag.addEventListener(evt, (e) => {
-        filterByTag(e.currentTarget.id);
+        displayByTag(e.currentTarget.id);
       });
     });
   });
@@ -83,14 +89,20 @@ function printObjects(objects, type) {
   }
 }
 
-async function displayDynamics(url) {
+async function displayDynamics(url, tag) {
   try {
     const response = await fetch(url);
     const objects = await response.json();
     photographersArray = [...objects.photographers];
+    let photographersInput = [];
+    if (tag) {
+      photographersInput = filterByTag(tag);
+    } else {
+      photographersInput = photographersArray;
+    }
     const tags = mergeArraysAndGetUnique(photographersArray);
     printObjects(tags, 'tags');
-    printObjects(objects.photographers, 'cards');
+    printObjects(photographersInput, 'cards');
     addEventList('.photographer-tag', ['click', 'keypress']);
   } catch (error) {
     alert(error.message);
@@ -114,3 +126,17 @@ const observer = new IntersectionObserver((entries) => {
 displayDynamics('./db/photographers.json');
 
 observer.observe(document.querySelector('.main-title'));
+
+function run() {
+  try {
+    const queryStringUrlId = window.location.search;
+    const searchParamsId = new URLSearchParams(queryStringUrlId);
+    const tag = searchParamsId.get('tag');
+    displayDynamics('./db/photographers.json', tag);
+    observer.observe(document.querySelector('.main-title'));
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+run();
