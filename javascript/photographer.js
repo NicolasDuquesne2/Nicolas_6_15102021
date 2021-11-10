@@ -175,71 +175,10 @@ run();
 
 /* events functions */
 
-/* onSortFocus: when the sort slector takes the focus,
-elements of the dropdow menu take class straigth, bottom-radius, top-radius, bottom radius
-according to the choosen element */
+/* onRadioButtonFocus*/
 
-function onSortFocus(event) {
-  try {
-    const sortSelector = event.target;
-    const childr = sortSelector.children;
-    const optionsArray = [childr.opt1, childr.opt2, childr.opt3];
-    const selectedOption = optionsArray.filter((object) => object.checked === true);
-    switch (selectedOption[0].id) {
-      case 'opt1':
-        modifyClassAttrList(childr[1], 'remove', 'straigth');
-        modifyClassAttrList(childr[1], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[1], 'add', 'top-radius');
-        modifyClassAttrList(childr[3], 'add', 'straigth');
-        modifyClassAttrList(childr[3], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[3], 'remove', 'top-radius');
-        modifyClassAttrList(childr[5], 'add', 'bottom-radius');
-        modifyClassAttrList(childr[5], 'remove', 'straigth');
-        modifyClassAttrList(childr[5], 'remove', 'top-radius');
-        break;
-      case 'opt2':
-        modifyClassAttrList(childr[1], 'add', 'straigth');
-        modifyClassAttrList(childr[1], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[1], 'remove', 'top-radius');
-        modifyClassAttrList(childr[3], 'remove', 'straigth');
-        modifyClassAttrList(childr[3], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[3], 'add', 'top-radius');
-        modifyClassAttrList(childr[5], 'add', 'bottom-radius');
-        modifyClassAttrList(childr[5], 'remove', 'straigth');
-        modifyClassAttrList(childr[1], 'remove', 'top-radius');
-        break;
-      case 'opt3':
-        modifyClassAttrList(childr[1], 'add', 'straigth');
-        modifyClassAttrList(childr[1], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[1], 'remove', 'top-radius');
-        modifyClassAttrList(childr[3], 'add', 'bottom-radius');
-        modifyClassAttrList(childr[3], 'remove', 'straigth');
-        modifyClassAttrList(childr[3], 'remove', 'top-radius');
-        modifyClassAttrList(childr[5], 'remove', 'bottom-radius');
-        modifyClassAttrList(childr[5], 'remove', 'straigth');
-        modifyClassAttrList(childr[5], 'add', 'top-radius');
-        break;
-      default:
-    }
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-/* onSortBlur : remove all label formatting classes from the sort selector */
-
-function onSortBlur(event) {
-  try {
-    const sortSelector = event.target;
-    const childr = sortSelector.children;
-    const optionsArray = [childr[1], childr[3], childr[5]];
-
-    optionsArray.forEach((option) => {
-      modifyClassAttrList(option, 'remove', 'straigth');
-      modifyClassAttrList(option, 'remove', 'bottom-radius');
-      modifyClassAttrList(option, 'remove', 'top-radius');
-    });
-  } catch (error) {
-    alert(error.message);
-  }
+function onRadioButtonfocus(event) {
+  event.stopPropagation();
+  console.log(event.target);
+  const checkButton = event.target;
 }

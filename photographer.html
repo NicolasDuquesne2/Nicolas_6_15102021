@@ -23,12 +23,25 @@
             <button class="modal-button" type="button">Contactez-moi</button>
             <div class="sort-wrapper">
                 <p class=" sort-wrapper-label">Trier par</p>
-                <div class="select" tabindex="0" onfocus="return onSortFocus(event)" onblur="return onSortBlur(event)">
-                    <input class="options-select" name="selectors" type="radio" id="opt1" checked>
+                <div class="select" tabindex="0">
+                    <input class="options-select" 
+                    name="selectors" 
+                    type="radio" 
+                    id="opt1" 
+                    checked
+                    onfocus="return onRadioButtonfocus(event)">
                     <label for="opt1" class="option">Popularité</label>
-                    <input class="options-select" name="selectors" type="radio" id="opt2">
+                    <input class="options-select" 
+                    name="selectors" 
+                    type="radio" 
+                    id="opt2"
+                    onfocus="return onRadioButtonfocus(event)">
                     <label for="opt2" class="option">Date</label>
-                    <input class="options-select" name="selectors" type="radio" id="opt3">
+                    <input class="options-select" 
+                    name="selectors" 
+                    type="radio" 
+                    id="opt3"
+                    onfocus="return onRadioButtonfocus(event)">
                     <label for="opt3" class="option">Titre</label>
                 </div>
             </div>
