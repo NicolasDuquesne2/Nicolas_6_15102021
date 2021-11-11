@@ -385,7 +385,6 @@ main {
         display: flex;
         top: 270px;
         position: absolute;
-
     }
 
     .sort-wrapper-label {
@@ -418,6 +417,7 @@ main {
         overflow:hidden;
         white-space:nowrap;
         background: transparent;
+        pointer-events:none;
     }
     
     .select:focus-within .option {
@@ -425,6 +425,7 @@ main {
         pointer-events:all;
         background: transparent;
         border-top:1px solid white;
+        pointer-events:all;
     }
     
     .options-select {
@@ -440,6 +441,7 @@ main {
         position:relative;
         background: var(--second-font-color);
         border-radius: 5px;
+        pointer-events:none;
     }
 
     /* a simple chevron*/

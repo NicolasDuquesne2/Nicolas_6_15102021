@@ -2,12 +2,26 @@
 
 let photographerId = '';
 let photographerName = '';
+let mediasByPhotogId = [];
 
-/* filterObjectsByTag returns objects */
+/* filterObjectsById returns objects according to porperty and id,
+were id is a number */
 
 function filterObjectsById(objects, id, property) {
   const filtPhotoArr = objects.filter((object) => object[property] === Number(id));
   return filtPhotoArr;
+}
+
+/* sortObjectsById */
+function sortObjectsById(objects, property) {
+  let sortObjects = [];
+
+  if (typeof (objects[0][property]) === 'string') {
+    sortObjects = objects.sort((a, b) => a[property].localeCompare(b[property]));
+  } else {
+    sortObjects = objects.sort((a, b) => b[property] - a[property]);
+  }
+  return sortObjects;
 }
 
 /* createMediaHtml creates the right html according the type of object.
@@ -45,6 +59,7 @@ function createMediaHtml(type, object) {
 
 function printMedias(objects) {
   const mediasWrapper = document.querySelector('.medias-wrapper');
+  mediasWrapper.innerHTML = '';
   objects.forEach((element) => {
     let type = '';
     if (element.image) {
@@ -103,9 +118,10 @@ async function displayDynamics(url, id) {
     const response = await fetch(url);
     const objects = await response.json();
     const photographersById = filterObjectsById(objects.photographers, id, 'id');
-    const mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
+    mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
+    const sortedMedias = sortObjectsById(mediasByPhotogId, 'likes');
     printObjects(photographersById, 'cards');
-    printObjects(mediasByPhotogId, 'medias');
+    printObjects(sortedMedias, 'medias');
   } catch (error) {
     alert(error.message);
   }
@@ -181,4 +197,6 @@ function onRadioButtonfocus(event) {
   event.stopPropagation();
   console.log(event.target);
   const checkButton = event.target;
+  const sortedMedias = sortObjectsById([...mediasByPhotogId], checkButton.id);
+  printMedias(sortedMedias);
 }
