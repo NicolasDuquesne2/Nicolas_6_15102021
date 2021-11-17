@@ -23,6 +23,7 @@
             </a>
         </header>
         <main>
+            <div class="light-box"></div>
             <div class="card-wrapper">
             </div>
             <button class="modal-button" type="button">Contactez-moi</button>
@@ -34,19 +35,22 @@
                     type="radio" 
                     id="likes" 
                     checked
-                    onfocus="return onRadioButtonfocus(event)">
+                    onkeydown="return onRadioButtonfocus(event)"
+                    onclick="return onRadioButtonfocus(event)">
                     <label for="likes" class="option">Popularité</label>
                     <input class="options-select" 
                     name="selectors" 
                     type="radio" 
                     id="dates"
-                    onfocus="return onRadioButtonfocus(event)">
+                    onkeydown="return onRadioButtonfocus(event)"
+                    onclick="return onRadioButtonfocus(event)">
                     <label for="dates" class="option">Date</label>
                     <input class="options-select" 
                     name="selectors" 
                     type="radio" 
                     id="title"
-                    onfocus="return onRadioButtonfocus(event)">
+                    onkeydown="return onRadioButtonfocus(event)"
+                    onclick="return onRadioButtonfocus(event)">
                     <label for="title" class="option">Titre</label>
                 </div>
             </div>

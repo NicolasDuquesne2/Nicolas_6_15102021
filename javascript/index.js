@@ -105,7 +105,7 @@ async function displayDynamics(url, tag) {
     printObjects(photographersInput, 'cards');
     addEventList('.photographer-tag', ['click', 'keypress']);
   } catch (error) {
-    alert(error.message);
+    console.log(error.message);
   }
   return true;
 }
@@ -135,7 +135,7 @@ function run() {
     displayDynamics('./db/photographers.json', tag);
     observer.observe(document.querySelector('.main-title'));
   } catch (error) {
-    alert(error.message);
+    console.log(error.message);
   }
 }
 

@@ -17,6 +17,10 @@ body {
     font-family: var(--font-default);
 }
 
+svg {
+    width: 0;
+    height: 0;
+}
 
 .main-wrapper {
     display: flex;
@@ -182,6 +186,16 @@ main {
     object-fit: cover;
 }
 
+.gallery-image:hover, .gallery-image:focus {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.gallery-video:hover, .gallery-image:focus {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
 .media-text-wrapper {
     display: flex;
     padding: 5px 0;
@@ -215,7 +229,7 @@ main {
 }
 
 .like-input {
-    display: absolute;
+    position: absolute;
     top: 0;
     left: -999999px;
     opacity: 0;

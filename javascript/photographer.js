@@ -25,38 +25,90 @@ function sortObjectsById(objects, property) {
   return sortObjects;
 }
 
-/* createMediaHtml creates the right html according the type of object.
-Returns a html object to build */
+/* getContiguousIndex returns an array with tab indexes of an object and its contiguous objects */
 
-function createMediaHtml(type, object) {
+function getContiguousIndex(array, attribute) {
+  const lastArrayIndex = array.length - 1;
+  const objectIndex = array.findIndex((element) => element.attribute === attribute);
+  const indexes = {};
+  switch (objectIndex) {
+    case 0:
+      indexes.currIndex = objectIndex;
+      indexes.nextIndex = objectIndex + 1;
+      break;
+    case lastArrayIndex:
+      indexes.currIndex = objectIndex;
+      indexes.prevIndex = objectIndex - 1;
+      break;
+    default:
+      indexes.currIndex = objectIndex;
+      indexes.prevIndex = objectIndex - 1;
+      indexes.nextIndex = objectIndex + 1;
+  }
+  return indexes;
+}
+
+/* createLightBox */
+
+function createLightBox(object, wrapper) {
   return {
     build() {
       let htmlObject = '';
-      const photographName = photographerName.split(' ');
-      htmlObject += '<div class="media-wrapper">';
-      switch (type) {
-        case 'image':
-          htmlObject += `<img class="gallery-image" src="./media/img/${photographName[0]}/${object.image}">`;
-          break;
-        case 'video':
-          htmlObject += `<${type} class="gallery-video" controls>
-                            <source src="./media/video/${photographName[0]}/${object.video}">
-                         </${type}>`;
-          break;
-        default:
-      }
-      htmlObject += `<div class="media-text-wrapper">
-                        <p class="media-title">${object.title}</p>
-                        <p class="media-price">${object.price}€</p>
-                        <p class="likes-text">${object.likes}</p>
-                        <label class="heart-label" for="${object.id}">
-                          <svg class="heart-svg" fill="false">
-                            <use xlink:href="#heart-solid"></use>
-                          </svg>
-                        </label>
-                        <input class="like-input" type="checkbox" id="${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
-                     </div>
-                  </div>`;
+      const med = object.media;
+      const indexesObj = object.indexes;
+      const objectType = object.image ? 'image' : 'video';
+      htmlObject += '';
+      return htmlObject;
+    },
+  };
+}
+
+/* createGalleryHtml creates the right html according the type of object.
+Returns a html object to build */
+
+function createGalleryHtml(objects) {
+  return {
+    build() {
+      let htmlObject = '';
+      objects.forEach((object) => {
+        const photographName = photographerName.split(' ');
+        const type = object.image ? 'image' : 'video';
+        htmlObject += '<div class="media-wrapper">';
+        switch (type) {
+          case 'image':
+            htmlObject += `<img class="gallery-image"
+                            id="${object.id}"
+                            src="./media/img/${photographName[0]}/${object.image}"
+                            onkeydown ="return onMediaSelect(event)"
+                            onclick="return onMediaSelect(event)"
+                            tabindex=0>`;
+            break;
+          case 'video':
+            htmlObject += `<${type} 
+                            class="gallery-video"
+                            id="${object.id}"
+                            controls
+                            onkeydown ="return onMediaSelect(event)"
+                            onclick="return onMediaSelect(event)"
+                            tabindex=0>
+                              <source src="./media/video/${photographName[0]}/${object.video}">
+                          </${type}>`;
+            break;
+          default:
+        }
+        htmlObject += `<div class="media-text-wrapper">
+                          <p class="media-title">${object.title}</p>
+                          <p class="media-price">${object.price}€</p>
+                          <p class="likes-text">${object.likes}</p>
+                          <label class="heart-label" for="input${object.id}">
+                            <svg class="heart-svg" fill="false">
+                              <use xlink:href="#heart-solid"></use>
+                            </svg>
+                          </label>
+                          <input class="like-input" type="checkbox" id="input${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
+                      </div>
+                    </div>`;
+      });
       return htmlObject;
     },
   };
@@ -64,25 +116,26 @@ function createMediaHtml(type, object) {
 
 /* printMedias build images or videos with calling the object factory createMediaHtml */
 
-function printMedias(objects) {
-  const mediasWrapper = document.querySelector('.medias-wrapper');
+function printMedias(objects, wrapper) {
+  const mediasWrapper = wrapper;
   mediasWrapper.innerHTML = '';
-  objects.forEach((element) => {
-    let type = '';
-    if (element.image) {
-      type = 'image';
-    } else if (element.video) {
-      type = 'video';
-    }
-    const htmlMedia = createMediaHtml(type, element);
-    mediasWrapper.innerHTML += htmlMedia.build();
-  });
+  let htmlMedia = null;
+
+  switch (mediasWrapper.className) {
+    case 'light-box':
+      break;
+    case 'medias-wrapper':
+      htmlMedia = createGalleryHtml(objects);
+      break;
+    default:
+  }
+  mediasWrapper.innerHTML += htmlMedia.build();
 }
 
 /* print cards displays cards model in the html with datas */
 
-function printCards(objects) {
-  const cardsWrapper = document.querySelector('.card-wrapper');
+function printCards(objects, wrapper) {
+  const cardsWrapper = wrapper;
   let cardhtmlModel = '';
   objects.forEach((element) => {
     cardhtmlModel += `<div class="id-wrapper">
@@ -104,13 +157,13 @@ function printCards(objects) {
   cardsWrapper.innerHTML = cardhtmlModel;
 }
 /* launches the display process according type given */
-function printObjects(objects, type) {
+function printObjects(objects, type, wrapper) {
   switch (type) {
     case 'medias':
-      printMedias(objects);
+      printMedias(objects, wrapper);
       break;
     case 'cards':
-      printCards(objects);
+      printCards(objects, wrapper);
       break;
     default:
   }
@@ -127,8 +180,10 @@ async function displayDynamics(url, id) {
     const photographersById = filterObjectsById(objects.photographers, id, 'id');
     mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
     const sortedMedias = sortObjectsById(mediasByPhotogId, 'likes');
-    printObjects(photographersById, 'cards');
-    printObjects(sortedMedias, 'medias');
+    const cardsWrapper = document.querySelector('.card-wrapper');
+    const mediasWrapper = document.querySelector('.medias-wrapper');
+    printObjects(photographersById, 'cards', cardsWrapper);
+    printObjects(sortedMedias, 'medias', mediasWrapper);
   } catch (error) {
     alert(error.message);
   }
@@ -207,7 +262,8 @@ function onRadioButtonfocus(event) {
   printMedias(sortedMedias);
 }
 
-/* onHeartCheckBox */
+/* onHeartCheckBox adds a like and turn the heart svg attribute fill into true
+if the button is checked. Do the opposite operation if the button is unchecked */
 
 function onHeartCheckBox(event) {
   const checkButton = event.target;
@@ -225,4 +281,22 @@ function onHeartCheckBox(event) {
   }
 
   likeLabel.innerText = String(likeLabelValue);
+}
+
+/* onMediaFocus */
+
+function onMediaSelect(event) {
+  if (event.code === 'Enter' || event.type === 'click') {
+    event.preventDefault();
+    event.stopPropagation();
+    const media = event.target;
+    const mediaInDb = filterObjectsById([...mediasByPhotogId], media.id, 'id');
+    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], media.id);
+    const mediaPack = {
+      media: mediaInDb,
+      indexes: mediaAdjIndex,
+    };
+    const targetedWrapper = document.querySelector('.light-box');
+    printObjects(mediaPack, 'medias', targetedWrapper);
+  }
 }
