@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* At loading page */
 
 let photographerId = '';
@@ -47,7 +48,13 @@ function createMediaHtml(type, object) {
       htmlObject += `<div class="media-text-wrapper">
                         <p class="media-title">${object.title}</p>
                         <p class="media-price">${object.price}€</p>
-                        <p class="likes-text">${object.likes}<i class="fas fa-heart" aria-label="likes"></i></p
+                        <p class="likes-text">${object.likes}</p>
+                        <label class="heart-label" for="${object.id}">
+                          <svg class="heart-svg" fill="false">
+                            <use xlink:href="#heart-solid"></use>
+                          </svg>
+                        </label>
+                        <input type="checkbox" id="${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
                      </div>
                   </div>`;
       return htmlObject;
@@ -191,12 +198,31 @@ run();
 
 /* events functions */
 
-/* onRadioButtonFocus*/
+/* onRadioButtonFocus */
 
 function onRadioButtonfocus(event) {
   event.stopPropagation();
-  console.log(event.target);
-  const checkButton = event.target;
-  const sortedMedias = sortObjectsById([...mediasByPhotogId], checkButton.id);
+  const radioButton = event.target;
+  const sortedMedias = sortObjectsById([...mediasByPhotogId], radioButton.id);
   printMedias(sortedMedias);
+}
+
+/* onHeartCheckBox */
+
+function onHeartCheckBox(event) {
+  const checkButton = event.target;
+  const checkLabel = checkButton.labels[0];
+  const heartSVG = checkLabel.children[0];
+  const likeLabel = checkButton.parentElement.children[2];
+  let likeLabelValue = Number(likeLabel.innerText);
+
+  if (checkButton.checked) {
+    heartSVG.setAttribute('fill', 'true');
+    likeLabelValue += 1;
+  } else {
+    heartSVG.setAttribute('fill', 'false');
+    likeLabelValue -= 1;
+  }
+
+  likeLabel.innerText = String(likeLabelValue);
 }

@@ -214,9 +214,24 @@ main {
     align-items: center;
 }
 
-.fa-heart {
-    font-size: 12px;
-    margin-left: 3px;
+.heart-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.heart-svg {
+    width: 1em;
+    height: 1em;
+    fill:none;
+    stroke: black;
+    stroke-width: 20;
+}
+
+.heart-svg[fill="true"] {
+    fill: var(--second-font-color);
+    stroke: none;
 }
 
 /* contact modal*/
@@ -587,11 +602,6 @@ main {
         font-weight: 500;
         justify-content: flex-end;
         align-items: center;
-    }
-    
-    .fa-heart {
-        font-size: 12px;
-        margin-left: 3px;
     }
     
 }
