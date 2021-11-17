@@ -214,11 +214,18 @@ main {
     align-items: center;
 }
 
+.like-input {
+    display: absolute;
+    top: 0;
+    left: -999999px;
+    opacity: 0;
+}
+
 .heart-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 1em;
+    height: 1em;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .heart-svg {
@@ -227,6 +234,8 @@ main {
     fill:none;
     stroke: black;
     stroke-width: 20;
+    transition: fill 4000ms ease-in-out;
+    cursor: pointer;
 }
 
 .heart-svg[fill="true"] {

@@ -54,7 +54,7 @@ function createMediaHtml(type, object) {
                             <use xlink:href="#heart-solid"></use>
                           </svg>
                         </label>
-                        <input type="checkbox" id="${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
+                        <input class="like-input" type="checkbox" id="${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
                      </div>
                   </div>`;
       return htmlObject;
