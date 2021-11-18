@@ -387,19 +387,19 @@ main {
 }
 
 .prev-button, .next-button {
-    opacity: 0;
-    position: absolute;
-    left: -999999px;
+    width: 12px;
+    height: 20px;
+    margin-bottom: auto;
+    margin-top: auto;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
-.prev-label, .next-label {
-    margin-top: auto;
-    margin-bottom: auto;
-}
 
 /* a simple chevron*/
 
-.prev-label:after {
+.prev-button:after {
     content:'';
     width: 10px; 
     height: 10px; 
@@ -407,12 +407,12 @@ main {
     border-bottom: 3px solid var(--second-font-color);
     position:absolute;
     transform: rotate(135deg);
-    left:0px;
-    top:calc(50% - 2.5px);
+    left:2px;
+    top:calc(50% - 5px);
     z-index:3;
 }
 
-.next-label::after {
+.next-button::after {
     content:'';
     width: 10px; 
     height: 10px; 
@@ -420,8 +420,8 @@ main {
     border-bottom: 3px solid var(--second-font-color);
     position:absolute;
     transform: rotate(-45deg);
-    right:20px;
-    top:calc(50% - 2.5px);
+    right:22px;
+    top:calc(50% - 5px);
     z-index:3;
 }
 

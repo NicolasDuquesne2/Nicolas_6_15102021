@@ -29,7 +29,14 @@ function sortObjectsById(objects, property) {
 
 function getContiguousIndex(array, attribute) {
   const lastArrayIndex = array.length - 1;
-  const objectIndex = array.findIndex((element) => element.id === Number(attribute));
+  let objectIndex = null;
+
+  if (attribute.type === 'id') {
+    objectIndex = array.findIndex((element) => element.id === Number(attribute.value));
+  } else if (attribute.type === 'index') {
+    objectIndex = Number(attribute.value);
+  }
+
   const indexes = {};
   switch (objectIndex) {
     case 0:
@@ -54,14 +61,19 @@ function createLightBox(object) {
   return {
     build() {
       let htmlObject = '';
-      const med = object.media[0];
+      const med = object.media;
       const indexesObj = object.indexes;
       const type = med.image ? 'image' : 'video';
       const photographName = photographerName.split(' ');
 
       if (Object.prototype.hasOwnProperty.call(indexesObj, 'prevIndex')) {
-        htmlObject += `<input class="prev-button" id=${indexesObj.prevIndex} type="button">
-                       <label class="prev-label" for=${indexesObj.prevIndex}></label>`;
+        htmlObject += `<button 
+                        class="prev-button" 
+                        id="${indexesObj.prevIndex}"
+                        onclick="return onlightButton(event)"
+                        onkeydown="return onlightButton(event)"
+                        tabindex=0>
+                       </button>`;
       }
 
       switch (type) {
@@ -82,11 +94,20 @@ function createLightBox(object) {
       }
 
       if (Object.prototype.hasOwnProperty.call(indexesObj, 'nextIndex')) {
-        htmlObject += `<input class="next-button" id=${indexesObj.nextIndex} type="button">
-                       <label class="next-label" for=${indexesObj.nextIndex}></label>`;
+        htmlObject += `<button 
+                        class="next-button" 
+                        id="${indexesObj.nextIndex}"
+                        onclick="return onlightButton(event)"
+                        onkeydown="return onlightButton(event)"
+                        tabindex=0>
+                      </button>`;
       }
 
-      htmlObject += '<button class="form-close light-close" type="button"></button>';
+      htmlObject += `<button 
+                      class="form-close light-close" 
+                      onclick="return onLightClose(event)"
+                      onkeydown="return onLightClose(event)>"
+                    </button>`;
 
       return htmlObject;
     },
@@ -325,12 +346,47 @@ function onMediaSelect(event) {
     event.stopPropagation();
     const media = event.target;
     const mediaInDb = filterObjectsById([...mediasByPhotogId], media.id, 'id');
-    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], media.id);
+    const attribute = {
+      type: 'id',
+      value: media.id,
+    };
+    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], attribute);
+    const mediaPack = {
+      media: mediaInDb[0],
+      indexes: mediaAdjIndex,
+    };
+    const targetedWrapper = document.querySelector('.light-box');
+    printObjects(mediaPack, 'medias', targetedWrapper);
+  }
+}
+
+/* onlightButton */
+
+function onlightButton(event) {
+  if (event.code === 'Enter' || event.type === 'click') {
+    event.preventDefault();
+    event.stopPropagation();
+    const button = event.target;
+    const mediaInDb = mediasByPhotogId[button.id];
+    const attribute = {
+      type: 'index',
+      value: button.id,
+    };
+    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], attribute);
     const mediaPack = {
       media: mediaInDb,
       indexes: mediaAdjIndex,
     };
     const targetedWrapper = document.querySelector('.light-box');
     printObjects(mediaPack, 'medias', targetedWrapper);
+  }
+}
+
+/* onLightClose */
+
+function onLightClose(event) {
+  if (event.code === 'Enter' || event.type === 'click') {
+    const lightBox = document.querySelector('.light-box');
+    lightBox.innerHTML = '';
   }
 }
