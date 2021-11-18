@@ -29,7 +29,7 @@ function sortObjectsById(objects, property) {
 
 function getContiguousIndex(array, attribute) {
   const lastArrayIndex = array.length - 1;
-  const objectIndex = array.findIndex((element) => element.attribute === attribute);
+  const objectIndex = array.findIndex((element) => element.id === Number(attribute));
   const indexes = {};
   switch (objectIndex) {
     case 0:
@@ -50,14 +50,44 @@ function getContiguousIndex(array, attribute) {
 
 /* createLightBox */
 
-function createLightBox(object, wrapper) {
+function createLightBox(object) {
   return {
     build() {
       let htmlObject = '';
-      const med = object.media;
+      const med = object.media[0];
       const indexesObj = object.indexes;
-      const objectType = object.image ? 'image' : 'video';
-      htmlObject += '';
+      const type = med.image ? 'image' : 'video';
+      const photographName = photographerName.split(' ');
+
+      if (Object.prototype.hasOwnProperty.call(indexesObj, 'prevIndex')) {
+        htmlObject += `<input class="prev-button" id=${indexesObj.prevIndex} type="button">
+                       <label class="prev-label" for=${indexesObj.prevIndex}></label>`;
+      }
+
+      switch (type) {
+        case 'image':
+          htmlObject += `<img class="gallery-image"
+                            id="${med.id}"
+                            src="./media/img/${photographName[0]}/${med.image}">`;
+          break;
+        case 'video':
+          htmlObject += `<${type} 
+                            class="gallery-video"
+                            id="${med.id}"
+                            controls>
+                              <source src="./media/video/${photographName[0]}/${med.video}">
+                          </${type}>`;
+          break;
+        default:
+      }
+
+      if (Object.prototype.hasOwnProperty.call(indexesObj, 'nextIndex')) {
+        htmlObject += `<input class="next-button" id=${indexesObj.nextIndex} type="button">
+                       <label class="next-label" for=${indexesObj.nextIndex}></label>`;
+      }
+
+      htmlObject += '<button class="form-close light-close" type="button"></button>';
+
       return htmlObject;
     },
   };
@@ -123,6 +153,7 @@ function printMedias(objects, wrapper) {
 
   switch (mediasWrapper.className) {
     case 'light-box':
+      htmlMedia = createLightBox(objects);
       break;
     case 'medias-wrapper':
       htmlMedia = createGalleryHtml(objects);
@@ -257,6 +288,7 @@ run();
 
 function onRadioButtonfocus(event) {
   event.stopPropagation();
+  event.preventDefault();
   const radioButton = event.target;
   const sortedMedias = sortObjectsById([...mediasByPhotogId], radioButton.id);
   printMedias(sortedMedias);
@@ -266,6 +298,8 @@ function onRadioButtonfocus(event) {
 if the button is checked. Do the opposite operation if the button is unchecked */
 
 function onHeartCheckBox(event) {
+  event.stopPropagation();
+  event.preventDefault();
   const checkButton = event.target;
   const checkLabel = checkButton.labels[0];
   const heartSVG = checkLabel.children[0];
