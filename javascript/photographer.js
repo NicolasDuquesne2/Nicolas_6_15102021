@@ -29,32 +29,27 @@ function sortObjectsById(objects, property) {
 
 /* getContiguousIndex returns an array with tab indexes of an object and its contiguous objects */
 
-function getContiguousIndex(array, attribute) {
+function getContiguousId(array, attribute) {
   const lastArrayIndex = array.length - 1;
   let objectIndex = null;
+  objectIndex = array.findIndex((element) => element.id === Number(attribute.value));
+  const ids = {};
 
-  if (attribute.type === 'id') {
-    objectIndex = array.findIndex((element) => element.id === Number(attribute.value));
-  } else if (attribute.type === 'index') {
-    objectIndex = Number(attribute.value);
-  }
-
-  const indexes = {};
   switch (objectIndex) {
     case 0:
-      indexes.currIndex = objectIndex;
-      indexes.nextIndex = objectIndex + 1;
+      ids.currId = attribute.value;
+      ids.nextId = array[objectIndex + 1].id;
       break;
     case lastArrayIndex:
-      indexes.currIndex = objectIndex;
-      indexes.prevIndex = objectIndex - 1;
+      ids.currId = attribute.value;
+      ids.prevId = array[objectIndex - 1].id;
       break;
     default:
-      indexes.currIndex = objectIndex;
-      indexes.prevIndex = objectIndex - 1;
-      indexes.nextIndex = objectIndex + 1;
+      ids.currId = attribute.value;
+      ids.prevId = array[objectIndex - 1].id;
+      ids.nextId = array[objectIndex + 1].id;
   }
-  return indexes;
+  return ids;
 }
 
 /* createLightBox */
@@ -64,14 +59,14 @@ function createLightBox(object) {
     build() {
       let htmlObject = '';
       const med = object.media;
-      const indexesObj = object.indexes;
+      const idsObj = object.indexes;
       const type = med.image ? 'image' : 'video';
       const photographName = photographerName.split(' ');
 
-      if (Object.prototype.hasOwnProperty.call(indexesObj, 'prevIndex')) {
+      if (Object.prototype.hasOwnProperty.call(idsObj, 'prevId')) {
         htmlObject += `<button 
                         class="prev-button" 
-                        id="${indexesObj.prevIndex}"
+                        id="${idsObj.prevId}"
                         onclick="return onlightButton(event)"
                         onkeydown="return onlightButton(event)"
                         tabindex=0>
@@ -95,10 +90,10 @@ function createLightBox(object) {
         default:
       }
 
-      if (Object.prototype.hasOwnProperty.call(indexesObj, 'nextIndex')) {
+      if (Object.prototype.hasOwnProperty.call(idsObj, 'nextId')) {
         htmlObject += `<button 
                         class="next-button" 
-                        id="${indexesObj.nextIndex}"
+                        id="${idsObj.nextId}"
                         onclick="return onlightButton(event)"
                         onkeydown="return onlightButton(event)"
                         tabindex=0>
@@ -311,9 +306,8 @@ run();
 
 function onRadioButtonfocus(event) {
   event.stopPropagation();
-  event.preventDefault();
   const radioButton = event.target;
-  const sortedMedias = sortObjectsById([...mediasByPhotogId], radioButton.id);
+  const sortedMedias = sortObjectsById(mediasByPhotogId, radioButton.id);
   const mediasWrapper = document.querySelector('.medias-wrapper');
   printMedias(sortedMedias, mediasWrapper);
 }
@@ -353,10 +347,10 @@ function onMediaSelect(event) {
       type: 'id',
       value: media.id,
     };
-    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], attribute);
+    const mediaAdjId = getContiguousId([...mediasByPhotogId], attribute);
     const mediaPack = {
       media: mediaInDb[0],
-      indexes: mediaAdjIndex,
+      indexes: mediaAdjId,
     };
     const targetedWrapper = document.querySelector('.light-box');
     printObjects(mediaPack, 'medias', targetedWrapper);
@@ -370,14 +364,14 @@ function onlightButton(event) {
     event.preventDefault();
     event.stopPropagation();
     const button = event.target;
-    const mediaInDb = mediasByPhotogId[button.id];
+    const mediaInDb = filterObjectsById([...mediasByPhotogId], button.id, 'id');
     const attribute = {
       type: 'index',
       value: button.id,
     };
-    const mediaAdjIndex = getContiguousIndex([...mediasByPhotogId], attribute);
+    const mediaAdjIndex = getContiguousId([...mediasByPhotogId], attribute);
     const mediaPack = {
-      media: mediaInDb,
+      media: mediaInDb[0],
       indexes: mediaAdjIndex,
     };
     const targetedWrapper = document.querySelector('.light-box');

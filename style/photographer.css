@@ -523,7 +523,7 @@ main {
         pointer-events:none;
     }
     
-    .select:focus-within .option {
+    .select:focus .option {
         position:relative;
         pointer-events:all;
         background: transparent;
