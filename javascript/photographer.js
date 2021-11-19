@@ -52,6 +52,12 @@ function getContiguousId(array, attribute) {
   return ids;
 }
 
+/* getSummOn returns a summ on attributes of an objects collection */
+
+function getSummOn(objects, attribute) {
+  return objects.reduce((summ, object) => (summ + object[attribute]), 0);
+}
+
 /* createLightBox */
 
 function createLightBox(object) {
@@ -162,7 +168,8 @@ function createGalleryHtml(objects) {
   };
 }
 
-/* printMedias build images or videos with calling the object factory createMediaHtml */
+/* Is a factory.
+printMedias build images or videos with calling the object factory createMediaHtml */
 
 function printMedias(objects, wrapper) {
   const mediasWrapper = wrapper;
@@ -205,7 +212,25 @@ function printCards(objects, wrapper) {
   });
   cardsWrapper.innerHTML = cardhtmlModel;
 }
-/* launches the display process according type given */
+
+/* printWidgets builds the widget html */
+
+function printWidgets(widgetStats, wrapper) {
+  const widgetWrapper = wrapper;
+  let htmlObject = '';
+
+  htmlObject += `<div class="widg-likes-wrapper">
+                    <p class="widg-likes-text">${widgetStats.likes}</p>
+                    <svg class="widg-heart-svg" fill="false">
+                      <use xlink:href="#heart-solid"></use>
+                    </svg>
+                 </div>
+                 <p>${widgetStats.price}€/jour</p>`;
+
+  widgetWrapper.innerHTML = htmlObject;
+}
+
+/* Is a factory. launches the display process according a given type */
 function printObjects(objects, type, wrapper) {
   switch (type) {
     case 'medias':
@@ -213,6 +238,9 @@ function printObjects(objects, type, wrapper) {
       break;
     case 'cards':
       printCards(objects, wrapper);
+      break;
+    case 'widget':
+      printWidgets(objects, wrapper);
       break;
     default:
   }
@@ -229,10 +257,17 @@ async function displayDynamics(url, id) {
     const photographersById = filterObjectsById(objects.photographers, id, 'id');
     mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
     const sortedMedias = sortObjectsById(mediasByPhotogId, 'likes');
+    const summLikes = getSummOn(sortedMedias, 'likes');
+    const widgetStats = {
+      likes: summLikes,
+      price: photographersById[0].price,
+    };
     const cardsWrapper = document.querySelector('.card-wrapper');
     const mediasWrapper = document.querySelector('.medias-wrapper');
+    const widgetWrapper = document.querySelector('.stats-widget');
     printObjects(photographersById, 'cards', cardsWrapper);
     printObjects(sortedMedias, 'medias', mediasWrapper);
+    printObjects(widgetStats, 'widget', widgetWrapper);
   } catch (error) {
     alert(error.message);
   }
@@ -322,17 +357,22 @@ function onHeartCheckBox(event) {
   const checkLabel = checkButton.labels[0];
   const heartSVG = checkLabel.children[0];
   const likeLabel = checkButton.parentElement.children[2];
+  const likesLabel = document.querySelector('.widg-likes-text');
+  let likesLabelValue = Number(likesLabel.innerText);
   let likeLabelValue = Number(likeLabel.innerText);
 
   if (checkButton.checked) {
     heartSVG.setAttribute('fill', 'true');
     likeLabelValue += 1;
+    likesLabelValue += 1;
   } else {
     heartSVG.setAttribute('fill', 'false');
     likeLabelValue -= 1;
+    likesLabelValue -= 1;
   }
 
   likeLabel.innerText = String(likeLabelValue);
+  likesLabel.innerText = String(likesLabelValue);
 }
 
 /* onMediaFocus */

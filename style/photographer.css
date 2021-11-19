@@ -257,6 +257,35 @@ main {
     stroke: none;
 }
 
+/* widget stats wrapper */
+
+.stats-widget {
+    display: flex;
+    position: sticky;
+    justify-content: space-between;
+    margin-left: auto;
+    bottom: 0px;
+    max-width: 376px;
+    padding: 15px 50px;
+    background: var(--primary-bg-color);
+    font-size: 1.5em;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    font-weight:500;
+}
+
+.widg-likes-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.widg-heart-svg {
+    width: 0.9em;
+    height: 0.9em;
+    margin-left: 5px;
+}
+
 /* contact modal*/
 
 .form-wrapper {
