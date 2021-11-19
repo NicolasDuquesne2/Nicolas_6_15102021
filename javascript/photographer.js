@@ -17,8 +17,10 @@ function filterObjectsById(objects, id, property) {
 function sortObjectsById(objects, property) {
   let sortObjects = [];
 
-  if (typeof (objects[0][property]) === 'string') {
+  if (property === 'title') {
     sortObjects = objects.sort((a, b) => a[property].localeCompare(b[property]));
+  } else if (property === 'dates') {
+    sortObjects = objects.sort((a, b) => new Date(b.date) - new Date(a.date));
   } else {
     sortObjects = objects.sort((a, b) => b[property] - a[property]);
   }
@@ -312,7 +314,8 @@ function onRadioButtonfocus(event) {
   event.preventDefault();
   const radioButton = event.target;
   const sortedMedias = sortObjectsById([...mediasByPhotogId], radioButton.id);
-  printMedias(sortedMedias);
+  const mediasWrapper = document.querySelector('.medias-wrapper');
+  printMedias(sortedMedias, mediasWrapper);
 }
 
 /* onHeartCheckBox adds a like and turn the heart svg attribute fill into true
