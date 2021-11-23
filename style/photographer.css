@@ -569,10 +569,15 @@ main {
         background: transparent;
         pointer-events:none;
     }
+
+    .option:focus {
+        color: red;
+    }
     
     .select:focus .option {
         position:relative;
         pointer-events:all;
+        cursor: pointer;
         background: transparent;
         border-top:1px solid white;
         pointer-events:all;

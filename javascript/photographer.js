@@ -136,7 +136,7 @@ function createGalleryHtml(objects) {
                             src="./media/img/${photographName[0]}/${object.image}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            tabindex=-1>`;
+                            tabindex=0>`;
             break;
           case 'video':
             htmlObject += `<${type} 
@@ -145,7 +145,7 @@ function createGalleryHtml(objects) {
                             controls
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            tabindex=-1>
+                            tabindex=0>
                               <source src="./media/video/${photographName[0]}/${object.video}">
                           </${type}>`;
             break;
@@ -367,11 +367,12 @@ function closeByEsc(event) {
 /* onRadioButtonFocus */
 
 function onRadioButtonfocus(event) {
-  event.stopPropagation();
-  const radioButton = event.target;
-  const sortedMedias = sortObjectsById(mediasByPhotogId, radioButton.id);
-  const mediasWrapper = document.querySelector('.medias-wrapper');
-  printMedias(sortedMedias, mediasWrapper);
+  if (event.code === 'Enter' || event.type === 'click') {
+    event.stopPropagation();
+    const radioButton = event.target;
+    const sortedMedias = sortObjectsById(mediasByPhotogId, radioButton.id);
+    const mediasWrapper = document.querySelector('.medias-wrapper');
+  }
 }
 
 /* onHeartCheckBox adds a like and turn the heart svg attribute fill into true
