@@ -367,11 +367,12 @@ function closeByEsc(event) {
 /* onRadioButtonFocus */
 
 function onRadioButtonfocus(event) {
-  if (event.code === 'Enter' || event.type === 'click') {
+  if (event.code === 'ArrowDown' || event.code === 'ArrowUp' || event.type === 'click') {
     event.stopPropagation();
     const radioButton = event.target;
     const sortedMedias = sortObjectsById(mediasByPhotogId, radioButton.id);
     const mediasWrapper = document.querySelector('.medias-wrapper');
+    printObjects(sortedMedias, 'medias', mediasWrapper);
   }
 }
 
