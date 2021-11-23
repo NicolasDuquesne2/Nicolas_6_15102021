@@ -42,8 +42,8 @@ function addEventList(clas, events) {
 function printTags(objects) {
   const tagHtmlUl = document.querySelector('#main-tags-list');
   let tagHtmlModel = '';
-  objects.forEach((element, index) => {
-    tagHtmlModel += `<li class="photographer-tag" id=${element} tabindex=${index}><span aria-label="${element}">#${element}</span></li>`;
+  objects.forEach((element) => {
+    tagHtmlModel += `<li class="photographer-tag" id=${element} tabindex="0"><span aria-label="${element}">#${element}</span></li>`;
   });
   tagHtmlUl.innerHTML = tagHtmlModel;
 }
@@ -68,7 +68,7 @@ function printCards(objects) {
                             <nav class="profile-index-nav" id="profile-nav" role="navigation" aria-label="photogrpaher categories">
                                 <ul class="tags-list">`;
     element.tags.forEach((tag) => {
-      cardhtmlModel += `<li class="photographer-tag" id=${tag}><span aria-label="${tag}">#${tag}</span></li>`;
+      cardhtmlModel += `<li class="photographer-tag" id=${tag} tabindex="0"><span aria-label="${tag}">#${tag}</span></li>`;
     });
     cardhtmlModel += '</ul></nav></div></div>';
   });

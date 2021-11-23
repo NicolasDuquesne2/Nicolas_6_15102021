@@ -107,7 +107,8 @@ function createLightBox(object) {
       }
 
       htmlObject += `<button 
-                      class="form-close light-close" 
+                      class="form-close light-close"
+                      tabindex=0
                       onclick="return onLightClose(event)"
                       onkeydown="return onLightClose(event)>"
                     </button>`;
@@ -135,7 +136,7 @@ function createGalleryHtml(objects) {
                             src="./media/img/${photographName[0]}/${object.image}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            tabindex=0>`;
+                            tabindex=-1>`;
             break;
           case 'video':
             htmlObject += `<${type} 
@@ -144,7 +145,7 @@ function createGalleryHtml(objects) {
                             controls
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            tabindex=0>
+                            tabindex=-1>
                               <source src="./media/video/${photographName[0]}/${object.video}">
                           </${type}>`;
             break;
@@ -154,12 +155,19 @@ function createGalleryHtml(objects) {
                           <p class="media-title">${object.title}</p>
                           <p class="media-price">${object.price}€</p>
                           <p class="likes-text">${object.likes}</p>
+                          <input 
+                          class="like-input" 
+                          type="checkbox"
+                          tabindex="0"
+                          id="input${object.id}" 
+                          name="likes"
+                          onclick="return onHeartCheckBox(event)"
+                          onkeydown="return onHeartCheckBox(event)">
                           <label class="heart-label" for="input${object.id}">
                             <svg class="heart-svg" fill="false">
                               <use xlink:href="#heart-solid"></use>
                             </svg>
                           </label>
-                          <input class="like-input" type="checkbox" id="input${object.id}" name="likes" onchange="return onHeartCheckBox(event)">
                       </div>
                     </div>`;
       });
@@ -323,10 +331,9 @@ function run() {
     displayDynamics('./db/photographers.json', photographerId);
     const cardWrapper = document.querySelector('.card-wrapper');
     const modalButton = document.querySelector('.modal-button');
-    const modal = document.querySelector('.form-wrapper');
+    const modal = document.querySelector('.dial-bg');
     const closeModal = document.querySelector('.form-close');
     setObserver(cardWrapper, modalButton, 'not-visible');
-    addEventList(modalButton, ['click', 'keypress'], [modal, 'remove', 'not-visible']);
     addEventList(closeModal, ['click', 'keypress'], [modal, 'add', 'not-visible']);
   } catch (error) {
     alert(error.message);
@@ -336,6 +343,26 @@ function run() {
 run();
 
 /* events functions */
+
+/* openModal */
+
+function openModal(event) {
+  if (event.code === 'Enter' || event.type === 'click') {
+    const modal = document.querySelector('.dial-bg');
+    modifyClassAttrList(modal, 'remove', 'not-visible');
+    const firstName = modal.querySelector('input');
+    firstName.focus();
+  }
+}
+
+/* closeByEsc */
+
+function closeByEsc(event) {
+  if (event.code === 'Escape') {
+    const elementToClose = event.target;
+    modifyClassAttrList(elementToClose, 'add', 'not-visible');
+  }
+}
 
 /* onRadioButtonFocus */
 
@@ -351,28 +378,29 @@ function onRadioButtonfocus(event) {
 if the button is checked. Do the opposite operation if the button is unchecked */
 
 function onHeartCheckBox(event) {
-  event.stopPropagation();
-  event.preventDefault();
-  const checkButton = event.target;
-  const checkLabel = checkButton.labels[0];
-  const heartSVG = checkLabel.children[0];
-  const likeLabel = checkButton.parentElement.children[2];
-  const likesLabel = document.querySelector('.widg-likes-text');
-  let likesLabelValue = Number(likesLabel.innerText);
-  let likeLabelValue = Number(likeLabel.innerText);
+  if (event.code === 'Enter' || event.type === 'click') {
+    event.stopPropagation();
+    const checkButton = event.target;
+    const checkLabel = checkButton.labels[0];
+    const heartSVG = checkLabel.children[0];
+    const likeLabel = checkButton.parentElement.children[2];
+    const likesLabel = document.querySelector('.widg-likes-text');
+    let likesLabelValue = Number(likesLabel.innerText);
+    let likeLabelValue = Number(likeLabel.innerText);
 
-  if (checkButton.checked) {
-    heartSVG.setAttribute('fill', 'true');
-    likeLabelValue += 1;
-    likesLabelValue += 1;
-  } else {
-    heartSVG.setAttribute('fill', 'false');
-    likeLabelValue -= 1;
-    likesLabelValue -= 1;
+    if (checkButton.checked) {
+      heartSVG.setAttribute('fill', 'true');
+      likeLabelValue += 1;
+      likesLabelValue += 1;
+    } else {
+      heartSVG.setAttribute('fill', 'false');
+      likeLabelValue -= 1;
+      likesLabelValue -= 1;
+    }
+
+    likeLabel.innerText = String(likeLabelValue);
+    likesLabel.innerText = String(likesLabelValue);
   }
-
-  likeLabel.innerText = String(likeLabelValue);
-  likesLabel.innerText = String(likesLabelValue);
 }
 
 /* onMediaFocus */
@@ -393,7 +421,11 @@ function onMediaSelect(event) {
       indexes: mediaAdjId,
     };
     const targetedWrapper = document.querySelector('.light-box');
+    const targetedWrapperBg = document.querySelector('.light-bg');
     printObjects(mediaPack, 'medias', targetedWrapper);
+    const butt = targetedWrapper.querySelector('button');
+    butt.focus();
+    modifyClassAttrList(targetedWrapperBg, 'remove', 'not-visible');
   }
 }
 
@@ -423,7 +455,7 @@ function onlightButton(event) {
 
 function onLightClose(event) {
   if (event.code === 'Enter' || event.type === 'click') {
-    const lightBox = document.querySelector('.light-box');
-    lightBox.innerHTML = '';
+    const lightBg = document.querySelector('.light-bg');
+    modifyClassAttrList(lightBg, 'add', 'not-visible');
   }
 }

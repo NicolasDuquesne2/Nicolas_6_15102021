@@ -23,10 +23,15 @@
             </a>
         </header>
         <main>
-            <div class="light-box"></div>
+            <div class="light-bg not-visible">
+                <div class="light-box" tabindex="0"></div>
+            </div>
             <div class="card-wrapper">
             </div>
-            <button class="modal-button" type="button">Contactez-moi</button>
+            <button 
+            class="modal-button" 
+            type="button"
+            onclick="return openModal(event)">Contactez-moi</button>
             <div class="sort-wrapper">
                 <p class=" sort-wrapper-label">Trier par</p>
                 <div class="select" tabindex="0">
@@ -34,20 +39,23 @@
                     name="selectors" 
                     type="radio" 
                     id="likes" 
+                    tabindex="0"
                     checked
                     onkeydown="return onRadioButtonfocus(event)"
                     onclick="return onRadioButtonfocus(event)">
                     <label for="likes" class="option">Popularité</label>
                     <input class="options-select" 
                     name="selectors" 
-                    type="radio" 
+                    type="radio"
+                    tabindex="0"
                     id="dates"
                     onkeydown="return onRadioButtonfocus(event)"
                     onclick="return onRadioButtonfocus(event)">
                     <label for="dates" class="option">Date</label>
                     <input class="options-select" 
                     name="selectors" 
-                    type="radio" 
+                    type="radio"
+                    tabindex="0"
                     id="title"
                     onkeydown="return onRadioButtonfocus(event)"
                     onclick="return onRadioButtonfocus(event)">
@@ -56,22 +64,24 @@
             </div>
             <div class="medias-wrapper"></div>
             <div class="stats-widget"></div>
-            <div class="form-wrapper not-visible" role="Dialog">
-                <header class="form-header">
-                    <h1 class="form-title">Contactez-moi Mimi keel</h1>
-                    <button class="form-close" type="button"></button>
-                </header>
-                <form action="" class="contact-form">
-                    <label for="first-name" class="form-label">Prénom</label>
-                    <input type="text" name="First name" id="" class="text-input" onchange="">
-                    <label for="Last name" class="form-label">Nom</label>
-                    <input type="text" name="Last name" id="" class="text-input" onchange="">
-                    <label for="Email" class="form-label">Email</label>
-                    <input type="email" name="Email" id="" class="text-input" onchange="">
-                    <label for="Your message" class="form-label">Votre message</label>
-                    <textarea name="Your message" id="" class="text-aera"></textarea>
-                    <button type="submit" class="submit-button">Envoyer</button>
-                </form>
+            <div class="dial-bg not-visible" tabindex=0 onkeydown="return closeByEsc(event)">
+                <dialog class="dial-wrapper" role="Dialog">
+                    <header class="form-header">
+                        <h1 class="form-title">Contactez-moi Mimi keel</h1>
+                        <button class="form-close" type="button"></button>
+                    </header>
+                    <form action="" class="contact-form">
+                        <label for="first-name" class="form-label">Prénom</label>
+                        <input type="text" name="First name" id="" class="text-input" onchange="">
+                        <label for="Last name" class="form-label">Nom</label>
+                        <input type="text" name="Last name" id="" class="text-input" onchange="">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" name="Email" id="" class="text-input" onchange="">
+                        <label for="Your message" class="form-label">Votre message</label>
+                        <textarea name="Your message" id="" class="text-aera"></textarea>
+                        <button type="submit" class="submit-button">Envoyer</button>
+                    </form>
+                </dialog>
             </div>
         </main>
     </div>
