@@ -74,7 +74,7 @@
                         onclick="return onClose(event)"
                         onkeydown="return   onClose(event)"></button>
                     </header>
-                    <form action="" class="contact-form">
+                    <form action="" class="contact-form" onsubmit="return onSubForm(event)">
                         <label for="first-name" class="form-label">Prénom</label>
                         <input type="text" name="First name" id="" class="text-input" onchange="">
                         <label for="Last name" class="form-label">Nom</label>
@@ -83,7 +83,9 @@
                         <input type="email" name="Email" id="" class="text-input" onchange="">
                         <label for="Your message" class="form-label">Votre message</label>
                         <textarea name="Your message" id="" class="text-aera"></textarea>
-                        <button type="submit" class="submit-button">Envoyer</button>
+                        <button 
+                        type="submit" 
+                        class="submit-button">Envoyer</button>
                     </form>
                 </dialog>
             </div>

@@ -493,3 +493,15 @@ function onClose(event) {
     modifyClassAttrList(wrapperbg, 'add', 'not-visible');
   }
 }
+
+/* onSubForm */
+
+function onSubForm(event) {
+  event.preventDefault();
+  const form = event.target;
+  const inputs = form.querySelectorAll('input, textarea');
+
+  inputs.forEach((input) => {
+    console.log(input.value);
+  });
+}
