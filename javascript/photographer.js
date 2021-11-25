@@ -215,6 +215,10 @@ function printCards(objects, wrapper) {
     cardhtmlModel += `</ul>
                 </nav>
           </div>
+          <button 
+            class="modal-button" 
+            type="button"
+            onclick="return openModal(event)">Contactez-moi</button>
           <img src="./media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
     </div>`;
   });
@@ -254,6 +258,20 @@ function printObjects(objects, type, wrapper) {
   }
 }
 
+/* setObserver let to add or remove class attribute on modified html
+from observee's viewing degree  */
+
+function setObserver(observee, modified, modificator) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio === 0) {
+      modified.classList.remove(modificator);
+    } else {
+      modified.classList.add(modificator);
+    }
+  }, { threshold: [0] });
+  observer.observe(observee);
+}
+
 /* main displaying function. gets the json file, parse it into js objects,
 get photographer by id and medias belonging to the photographer
 launches prints */
@@ -276,6 +294,9 @@ async function displayDynamics(url, id) {
     printObjects(photographersById, 'cards', cardsWrapper);
     printObjects(sortedMedias, 'medias', mediasWrapper);
     printObjects(widgetStats, 'widget', widgetWrapper);
+    const cardWrapper = document.querySelector('.card-wrapper');
+    const modalButton = document.querySelector('.modal-button');
+    setObserver(cardWrapper, modalButton, 'not-visible');
   } catch (error) {
     alert(error.message);
   }
@@ -296,20 +317,6 @@ function modifyClassAttrList(object, modifOption, atrr) {
   }
 }
 
-/* setObserver let to add or remove class attribute on modified html
-from observee's viewing degree  */
-
-function setObserver(observee, modified, modificator) {
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].intersectionRatio === 0) {
-      modified.classList.remove(modificator);
-    } else {
-      modified.classList.add(modificator);
-    }
-  }, { threshold: [0] });
-  observer.observe(observee);
-}
-
 /* the primary runing function. all loading page routines are here */
 
 function run() {
@@ -319,9 +326,6 @@ function run() {
     photographerId = searchParamsId.get('id');
     photographerName = searchParamsId.get('name');
     displayDynamics('./db/photographers.json', photographerId);
-    const cardWrapper = document.querySelector('.card-wrapper');
-    const modalButton = document.querySelector('.modal-button');
-    setObserver(cardWrapper, modalButton, 'not-visible');
   } catch (error) {
     alert(error.message);
   }

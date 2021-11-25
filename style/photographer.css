@@ -56,6 +56,7 @@ main {
 
 .id-wrapper {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -473,7 +474,7 @@ main {
     z-index:3;
 }
 
-@media screen and (min-width:669px) {
+@media screen and (min-width:730px) {
 
     .card-wrapper {
         max-width: 1240px;
@@ -483,12 +484,14 @@ main {
         padding: 56px 50px;
     }
 
+    .card {
+       width: 43%;
+    }
+
     /* modal button is now fixed*/
     .modal-button {
         display: flex;
-        position: absolute;
-        top: 70px;
-        left: 240px;
+        position:unset;
         padding: 15px 10px;
         font-size: 1em;
     }
@@ -623,7 +626,6 @@ main {
     .medias-wrapper {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
     }
 
     .media-wrapper {
@@ -702,6 +704,10 @@ main {
 
     /* profile card*/
 
+    .card {
+        width: unset;
+    }
+
     .profile-img-big {
         width: 200px;
         height: 200px;
@@ -740,7 +746,7 @@ main {
     /* sort section*/
 
     .sort-wrapper {
-        top: 310px;
+        top: 340px;
     }
 
     .option {
@@ -748,7 +754,7 @@ main {
     }
 
     .media-wrapper {
-        width: 32%;
+        width: 33.33%;
         margin-bottom: 20px;
     }
 
