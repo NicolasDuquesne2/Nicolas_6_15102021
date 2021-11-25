@@ -265,35 +265,12 @@ main {
 /* widget stats wrapper */
 
 .stats-widget {
-    display: flex;
-    position: sticky;
-    justify-content: space-between;
-    margin-left: auto;
-    bottom: 0px;
-    max-width: 376px;
-    padding: 15px 50px;
-    background: var(--primary-bg-color);
-    font-size: 1.5em;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    font-weight:500;
-}
-
-.widg-likes-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.widg-heart-svg {
-    width: 0.9em;
-    height: 0.9em;
-    margin-left: 5px;
+    display: none;
 }
 
 /* contact modal*/
 
-.dial-bg, .light-bg {
+.dial-bg {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -420,15 +397,46 @@ main {
 
 /* light Box*/
 
+.light-bg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:rgba(255, 252, 252, 1);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+}
 
 .light-box {
     display: flex;
-    width: 400px;
+    width: 90%;
+    height: 248px;
+}
+
+.light-image {
+    width: 95%;
+    height: 95%;
+    margin-top: auto;
+    margin-bottom: auto;
+    object-fit: cover;
+}
+
+.light-video {
+    width: 95%;
+    height: 95%;
+    margin-top: auto;
+    margin-bottom: auto;
+    object-fit: cover;
 }
 
 .prev-button, .next-button {
     width: 12px;
     height: 20px;
+    position: relative;
     margin-bottom: auto;
     margin-top: auto;
     border: none;
@@ -447,8 +455,8 @@ main {
     border-bottom: 3px solid var(--second-font-color);
     position:absolute;
     transform: rotate(135deg);
-    left:35%;
-    top:calc(50% - 5px);
+    left:0;
+    top:0;
     z-index:3;
 }
 
@@ -460,8 +468,8 @@ main {
     border-bottom: 3px solid var(--second-font-color);
     position:absolute;
     transform: rotate(-45deg);
-    right: 36%;
-    top:calc(50% - 5px);
+    right:0;
+    top:0;
     z-index:3;
 }
 
@@ -569,11 +577,7 @@ main {
         background: transparent;
         pointer-events:none;
     }
-
-    .option:focus {
-        color: red;
-    }
-    
+ 
     .select:focus .option {
         position:relative;
         pointer-events:all;
@@ -644,11 +648,49 @@ main {
 }
 
 @media screen and (min-width:800px) {
+
+    /* modal button*/
     .modal-button {
         left: 320px;
         font-size: 1.1em;
     }
 
+    /* light box*/
+
+    .light-box {
+        display: flex;
+        width: 90%;
+        height: 90%;
+    }
+
+    /* stats widget*/
+
+    .stats-widget {
+        display: flex;
+        position: sticky;
+        justify-content: space-between;
+        margin-left: auto;
+        bottom: 0px;
+        max-width: 276px;
+        padding: 10px 30px;
+        background: var(--primary-bg-color);
+        font-size: 1.5em;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-weight:500;
+    }
+    
+    .widg-likes-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .widg-heart-svg {
+        width: 0.9em;
+        height: 0.9em;
+        margin-left: 5px;
+    }
 }
 
 @media screen and (min-width:1000px) {
@@ -742,6 +784,20 @@ main {
         font-weight: 500;
         justify-content: flex-end;
         align-items: center;
+    }
+
+    /* stats widget*/
+
+    .stats-widget {
+        max-width: 376px;
+        padding: 15px 50px;
+        font-size: 1.5em;
+    }
+    
+    .widg-heart-svg {
+        width: 0.9em;
+        height: 0.9em;
+        margin-left: 5px;
     }
     
 }

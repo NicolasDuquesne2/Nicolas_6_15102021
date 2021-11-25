@@ -68,7 +68,11 @@
                 <dialog class="dial-wrapper" role="Dialog">
                     <header class="form-header">
                         <h1 class="form-title">Contactez-moi Mimi keel</h1>
-                        <button class="form-close" type="button"></button>
+                        <button 
+                        class="form-close" 
+                        type="button"
+                        onclick="return onClose(event)"
+                        onkeydown="return   onClose(event)"></button>
                     </header>
                     <form action="" class="contact-form">
                         <label for="first-name" class="form-label">Prénom</label>

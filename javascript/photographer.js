@@ -81,15 +81,16 @@ function createLightBox(object) {
 
       switch (type) {
         case 'image':
-          htmlObject += `<img class="gallery-image"
+          htmlObject += `<img class="light-image"
                             id="${med.id}"
                             src="./media/img/${photographName[0]}/${med.image}">`;
           break;
         case 'video':
           htmlObject += `<${type} 
-                            class="gallery-video"
+                            class="light-video"
                             id="${med.id}"
-                            controls>
+                            controls
+                            tabindex=0>
                               <source src="./media/video/${photographName[0]}/${med.video}">
                           </${type}>`;
           break;
@@ -109,8 +110,8 @@ function createLightBox(object) {
       htmlObject += `<button 
                       class="form-close light-close"
                       tabindex=0
-                      onclick="return onLightClose(event)"
-                      onkeydown="return onLightClose(event)>"
+                      onclick="return onClose(event)"
+                      onkeydown="return onClose(event)>"
                     </button>`;
 
       return htmlObject;
@@ -142,7 +143,6 @@ function createGalleryHtml(objects) {
             htmlObject += `<${type} 
                             class="gallery-video"
                             id="${object.id}"
-                            controls
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
                             tabindex=0>
@@ -296,16 +296,6 @@ function modifyClassAttrList(object, modifOption, atrr) {
   }
 }
 
-/* addEventList adds event listener to html elements for the modifyClassAttrList function */
-
-function addEventList(object, evts, params) {
-  evts.forEach((evt) => {
-    object.addEventListener(evt, () => {
-      modifyClassAttrList(params[0], params[1], params[2]);
-    });
-  });
-}
-
 /* setObserver let to add or remove class attribute on modified html
 from observee's viewing degree  */
 
@@ -331,10 +321,7 @@ function run() {
     displayDynamics('./db/photographers.json', photographerId);
     const cardWrapper = document.querySelector('.card-wrapper');
     const modalButton = document.querySelector('.modal-button');
-    const modal = document.querySelector('.dial-bg');
-    const closeModal = document.querySelector('.form-close');
     setObserver(cardWrapper, modalButton, 'not-visible');
-    addEventList(closeModal, ['click', 'keypress'], [modal, 'add', 'not-visible']);
   } catch (error) {
     alert(error.message);
   }
@@ -344,6 +331,42 @@ run();
 
 /* events functions */
 
+/* onTabInModal : intercepts tab focuses in modals
+in order to navigate in modals until modals are closed by user */
+
+const onTabInModal = (event) => {
+  if (event.code === 'Tab') {
+    const wrapper = event.currentTarget;
+    const targElmt = event.target;
+    let focusableElements = null;
+
+    if (wrapper.className === 'light-bg') { // focusable elements changes according to the wrapper
+      focusableElements = 'button, video';
+    } else if (wrapper.className === 'dial-bg') {
+      focusableElements = 'button, input, textarea';
+    }
+
+    // first focusable element
+    const firstFocusable = wrapper.querySelectorAll(focusableElements)[0];
+    // all focusable elements
+    const allFocusable = wrapper.querySelectorAll(focusableElements);
+    // last focusable element
+    const lastFocusable = allFocusable[allFocusable.length - 1];
+
+    if (event.shiftKey) { // If shift key pressed for shift + tab
+      if (targElmt === firstFocusable) {
+        lastFocusable.focus();
+        event.preventDefault();
+      }
+    } else { // only tab key pressed
+      // eslint-disable-next-line no-lonely-if
+      if (targElmt === lastFocusable) {
+        firstFocusable.focus();
+        event.preventDefault();
+      }
+    }
+  }
+};
 /* openModal */
 
 function openModal(event) {
@@ -351,6 +374,7 @@ function openModal(event) {
     const modal = document.querySelector('.dial-bg');
     modifyClassAttrList(modal, 'remove', 'not-visible');
     const firstName = modal.querySelector('input');
+    modal.addEventListener('keydown', onTabInModal, true);
     firstName.focus();
   }
 }
@@ -360,6 +384,7 @@ function openModal(event) {
 function closeByEsc(event) {
   if (event.code === 'Escape') {
     const elementToClose = event.target;
+    elementToClose.removeEventListener('keydown', onTabInModal, true);
     modifyClassAttrList(elementToClose, 'add', 'not-visible');
   }
 }
@@ -405,7 +430,7 @@ function onHeartCheckBox(event) {
   }
 }
 
-/* onMediaFocus */
+/* onMediaFocus : activates the light box on click or on tab */
 
 function onMediaSelect(event) {
   if (event.code === 'Enter' || event.type === 'click') {
@@ -428,10 +453,11 @@ function onMediaSelect(event) {
     const butt = targetedWrapper.querySelector('button');
     butt.focus();
     modifyClassAttrList(targetedWrapperBg, 'remove', 'not-visible');
+    targetedWrapperBg.addEventListener('keydown', onTabInModal, true);
   }
 }
 
-/* onlightButton */
+/* onlightButton  for previous and next media navigation into the light */
 
 function onlightButton(event) {
   if (event.code === 'Enter' || event.type === 'click') {
@@ -455,9 +481,15 @@ function onlightButton(event) {
 
 /* onLightClose */
 
-function onLightClose(event) {
+function onClose(event) {
   if (event.code === 'Enter' || event.type === 'click') {
-    const lightBg = document.querySelector('.light-bg');
-    modifyClassAttrList(lightBg, 'add', 'not-visible');
+    let wrapperbg = null;
+    if (event.target.className === 'form-close light-close') {
+      wrapperbg = document.querySelector('.light-bg');
+    } else if (event.target.className === 'form-close') {
+      wrapperbg = document.querySelector('.dial-bg');
+    }
+    wrapperbg.removeEventListener('keydown', onTabInModal, true);
+    modifyClassAttrList(wrapperbg, 'add', 'not-visible');
   }
 }
