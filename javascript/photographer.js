@@ -242,6 +242,15 @@ function printWidgets(widgetStats, wrapper) {
   widgetWrapper.innerHTML = htmlObject;
 }
 
+/* printHead */
+
+function printHead(objects, wrapper) {
+  const headTitle = wrapper;
+  objects.forEach((element) => {
+    headTitle.innerHTML = `Fisheye - ${element.name}`;
+  });
+}
+
 /* Is a factory. launches the display process according a given type */
 function printObjects(objects, type, wrapper) {
   switch (type) {
@@ -253,6 +262,9 @@ function printObjects(objects, type, wrapper) {
       break;
     case 'widget':
       printWidgets(objects, wrapper);
+      break;
+    case 'head':
+      printHead(objects, wrapper);
       break;
     default:
   }
@@ -291,7 +303,9 @@ async function displayDynamics(url, id) {
     const cardsWrapper = document.querySelector('.card-wrapper');
     const mediasWrapper = document.querySelector('.medias-wrapper');
     const widgetWrapper = document.querySelector('.stats-widget');
+    const headTitle = document.querySelector('head > title');
     printObjects(photographersById, 'cards', cardsWrapper);
+    printObjects(photographersById, 'head', headTitle);
     printObjects(sortedMedias, 'medias', mediasWrapper);
     printObjects(widgetStats, 'widget', widgetWrapper);
     const cardWrapper = document.querySelector('.card-wrapper');
@@ -409,7 +423,7 @@ function onRadioButtonfocus(event) {
 if the button is checked. Do the opposite operation if the button is unchecked */
 
 function onHeartCheckBox(event) {
-  if (event.code === 'Enter' || event.type === 'click') {
+  if (event.type === 'click') {
     event.stopPropagation();
     const checkButton = event.target;
     const checkLabel = checkButton.labels[0];

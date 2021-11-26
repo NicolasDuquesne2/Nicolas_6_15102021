@@ -233,12 +233,13 @@ main {
 .like-input {
     position: absolute;
     top: 40%;
-    left: -999999px;
+    left: -99999999px;
     opacity: 0;
 }
 
 .like-input:focus + .heart-label > .heart-svg {
-    stroke-width: 40;
+    width: 1.1em;
+    height: 1.1em;
 }
 
 .heart-label {
