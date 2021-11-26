@@ -247,7 +247,7 @@ function printWidgets(widgetStats, wrapper) {
 function printHead(objects, wrapper) {
   const headTitle = wrapper;
   objects.forEach((element) => {
-    headTitle.innerHTML = `Fisheye - ${element.name}`;
+    headTitle.innerHTML = `Fisheye - photographe : ${element.name}`;
   });
 }
 
