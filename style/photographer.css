@@ -73,7 +73,7 @@ main {
     z-index: 1;
     cursor: pointer;
     top: calc(50% - 16px);
-    left: calc(50% - 85px);
+    left: calc(50% - 113.5px);
     padding: 7px 48px;
     font-size: 1.1em;
     font-weight: 800;
@@ -84,6 +84,12 @@ main {
     opacity: 1;
     transform: scaleX(1);
     transition: all 0ms ease-out;
+}
+
+.modal-button:focus {
+    outline: none;
+    color: black;
+    background: var(--primary-bg-color);
 }
 
 .modal-button.not-visible {
@@ -150,6 +156,15 @@ main {
     padding: 1px 5px;
     margin-bottom: 6px;
     text-decoration: none;
+}
+
+.photographer-tag:focus{
+    outline: none;
+    background: var(--second-font-color);
+}
+
+.photographer-tag:focus > span {
+    color: white;
 }
 
 .photographer-tag > span{
@@ -333,6 +348,7 @@ main {
     border-radius: 5px;
     border-style: none;
     margin-bottom: 10px;
+    font-size: 1em;
 }
 
 .text-aera {
@@ -340,6 +356,7 @@ main {
     border-radius: 5px;
     border-style: none;
     margin-bottom: 15px;
+    font-size: 1em;
     resize: none;
     height: 184px;
 }
@@ -647,6 +664,16 @@ main {
 
     .media-text-wrapper {
         max-width: 350px;
+    }
+
+    /* contact form */
+
+    .text-input {
+        font-size: 26px;
+    }
+    
+    .text-aera {
+        font-size: 26px;
     }
 }
 
