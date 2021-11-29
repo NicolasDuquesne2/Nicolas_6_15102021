@@ -69,13 +69,16 @@ function createLightBox(object) {
       const type = med.image ? 'image' : 'video';
       const photographName = photographerName.split(' ');
 
+      htmlObject += '<div class="image-wrapper">';
+
       if (Object.prototype.hasOwnProperty.call(idsObj, 'prevId')) {
         htmlObject += `<button 
                         class="prev-button" 
                         id="${idsObj.prevId}"
                         onclick="return onlightButton(event)"
                         onkeydown="return onlightButton(event)"
-                        tabindex=0>
+                        tabindex=0
+                        aria-label="Image précédente">
                        </button>`;
       }
 
@@ -83,6 +86,8 @@ function createLightBox(object) {
         case 'image':
           htmlObject += `<img class="light-image"
                             id="${med.id}"
+                            alt="image ${med.title}"
+                            tabindex=0
                             src="./media/img/${photographName[0]}/${med.image}">`;
           break;
         case 'video':
@@ -91,6 +96,7 @@ function createLightBox(object) {
                             id="${med.id}"
                             controls
                             tabindex=0>
+                            aria-label=" vidéo ${med.title}">
                               <source src="./media/video/${photographName[0]}/${med.video}">
                           </${type}>`;
           break;
@@ -103,16 +109,21 @@ function createLightBox(object) {
                         id="${idsObj.nextId}"
                         onclick="return onlightButton(event)"
                         onkeydown="return onlightButton(event)"
+                        aria-label="Prochaine image"
                         tabindex=0>
                       </button>`;
       }
 
       htmlObject += `<button 
-                      class="form-close light-close"
-                      tabindex=0
-                      onclick="return onClose(event)"
-                      onkeydown="return onClose(event)>"
-                    </button>`;
+        class="form-close light-close"
+        aria-label="Fermer dialogue"
+        tabindex=0
+        onclick="return onClose(event)"
+        onkeydown="return onClose(event)>"
+      </button>`;
+
+      htmlObject += '</div>';
+      htmlObject += `<p class="light-box-title">${med.title}</p>`;
 
       return htmlObject;
     },
@@ -137,6 +148,7 @@ function createGalleryHtml(objects) {
                             src="./media/img/${photographName[0]}/${object.image}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
+                            aria-label="image ${object.title}"
                             tabindex=0>`;
             break;
           case 'video':
@@ -145,6 +157,7 @@ function createGalleryHtml(objects) {
                             id="${object.id}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
+                            aria-label=" vidéo ${object.title}"
                             tabindex=0>
                               <source src="./media/video/${photographName[0]}/${object.video}">
                           </${type}>`;
@@ -163,7 +176,7 @@ function createGalleryHtml(objects) {
                           name="likes"
                           onclick="return onHeartCheckBox(event)"
                           onkeydown="return onHeartCheckBox(event)">
-                          <label class="heart-label" for="input${object.id}">
+                          <label class="heart-label" for="input${object.id}" aria-label="likes">
                             <svg class="heart-svg" fill="false">
                               <use xlink:href="#heart-solid"></use>
                             </svg>
@@ -219,7 +232,7 @@ function printCards(objects, wrapper) {
             class="modal-button" 
             type="button"
             onclick="return openModal(event)">Contactez-moi</button>
-          <img src="./media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big">
+          <img src="./media/img/Photographers ID Photos/${element.portrait}" class="profile-img-big" alt="photo de ${element.name}">
     </div>`;
   });
   cardsWrapper.innerHTML = cardhtmlModel;
@@ -233,7 +246,7 @@ function printWidgets(widgetStats, wrapper) {
 
   htmlObject += `<div class="widg-likes-wrapper">
                     <p class="widg-likes-text">${widgetStats.likes}</p>
-                    <svg class="widg-heart-svg" fill="false">
+                    <svg class="widg-heart-svg" fill="false" aria-label="likes">
                       <use xlink:href="#heart-solid"></use>
                     </svg>
                  </div>

@@ -432,24 +432,43 @@ main {
 
 .light-box {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 90%;
+    max-width: 348px;
     height: 248px;
 }
 
-.light-image {
+.image-wrapper {
+    display: flex;
     width: 95%;
     height: 95%;
-    margin-top: auto;
+}
+
+.light-image {
+    width: 100%;
+    height: 100%;
     margin-bottom: auto;
+    margin-top: auto;
     object-fit: cover;
 }
 
 .light-video {
-    width: 95%;
-    height: 95%;
-    margin-top: auto;
+    width: 100%;
+    height: 100%;
     margin-bottom: auto;
+    margin-top: auto;
     object-fit: cover;
+}
+
+.light-box-title {
+    display: inline-block;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--second-font-color);
+    font-size: 0.8em;
 }
 
 .prev-button, .next-button {
@@ -675,6 +694,13 @@ main {
     .text-aera {
         font-size: 26px;
     }
+
+    /* light-box*/
+
+    .light-box-title {
+        width: 92%;
+        font-size: 1em;
+    }
 }
 
 @media screen and (min-width:800px) {
@@ -689,9 +715,11 @@ main {
 
     .light-box {
         display: flex;
+        max-width: 1242px;
         width: 90%;
         height: 90%;
     }
+
 
     /* stats widget*/
 
@@ -724,6 +752,14 @@ main {
 }
 
 @media screen and (min-width:1000px) {
+
+
+    /*light-box*/
+
+    .light-box-title {
+        width: 93.5%;
+        font-size: 1em;
+    }
 
     .title-link img {
         width: 200px;
