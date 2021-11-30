@@ -37,25 +37,28 @@
                     id="likes" 
                     tabindex="0"
                     checked
+                    aria-labelledby="likes-label"
                     onkeydown="return onRadioButtonfocus(event)"
                     onclick="return onRadioButtonfocus(event)">
-                    <label for="likes" class="option">Popularité</label>
+                    <label for="likes" class="option" id="likes-label">Popularité</label>
                     <input class="options-select" 
                     name="selectors" 
                     type="radio"
                     tabindex="0"
                     id="dates"
+                    aria-labelledby="date-label"
                     onkeydown="return onRadioButtonfocus(event)"
                     onclick="return onRadioButtonfocus(event)">
-                    <label for="dates" class="option">Date</label>
+                    <label for="dates" class="option" id="date-label">Date</label>
                     <input class="options-select" 
                     name="selectors" 
                     type="radio"
                     tabindex="0"
                     id="title"
                     onkeydown="return onRadioButtonfocus(event)"
-                    onclick="return onRadioButtonfocus(event)">
-                    <label for="title" class="option">Titre</label>
+                    onclick="return onRadioButtonfocus(event)"
+                    aria-labelledby="title-label">
+                    <label for="title" class="option" id="title-label">Titre</label>
                 </div>
             </div>
             <div class="medias-wrapper"></div>

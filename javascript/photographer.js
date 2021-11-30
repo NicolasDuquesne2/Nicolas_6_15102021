@@ -148,7 +148,7 @@ function createGalleryHtml(objects) {
                             src="./media/img/${photographName[0]}/${object.image}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            aria-label="image ${object.title}"
+                            aria-label="${object.describ}"
                             tabindex=0>`;
             break;
           case 'video':
@@ -157,7 +157,7 @@ function createGalleryHtml(objects) {
                             id="${object.id}"
                             onkeydown ="return onMediaSelect(event)"
                             onclick="return onMediaSelect(event)"
-                            aria-label=" vidéo ${object.title}"
+                            aria-label="${object.describ}"
                             tabindex=0>
                               <source src="./media/video/${photographName[0]}/${object.video}">
                           </${type}>`;
