@@ -13,7 +13,8 @@ function filterObjectsById(objects, id, property) {
   return filtPhotoArr;
 }
 
-/* sortObjectsById */
+/* sortObjectsById returns an array of sorted objects by text, date and others */
+
 function sortObjectsById(objects, property) {
   let sortObjects = [];
 
@@ -27,7 +28,7 @@ function sortObjectsById(objects, property) {
   return sortObjects;
 }
 
-/* getContiguousIndex returns an array with tab indexes of an object and its contiguous objects */
+/* getContiguousId returns an array with object's id  and its contiguous object's id */
 
 function getContiguousId(array, attribute) {
   const lastArrayIndex = array.length - 1;
@@ -58,7 +59,7 @@ function getSummOn(objects, attribute) {
   return objects.reduce((summ, object) => (summ + object[attribute]), 0);
 }
 
-/* createLightBox */
+/* createLightBox build a ligth box and select pics or videos html according to the object type */
 
 function createLightBox(object) {
   return {
@@ -238,7 +239,7 @@ function printCards(objects, wrapper) {
   cardsWrapper.innerHTML = cardhtmlModel;
 }
 
-/* printWidgets builds the widget html */
+/* printWidgets builds the widget sticked bottom right with total likes and price per day */
 
 function printWidgets(widgetStats, wrapper) {
   const widgetWrapper = wrapper;
@@ -255,12 +256,24 @@ function printWidgets(widgetStats, wrapper) {
   widgetWrapper.innerHTML = htmlObject;
 }
 
-/* printHead */
+/* printHead : prints the head title with photograph name */
 
 function printHead(objects, wrapper) {
   const headTitle = wrapper;
   objects.forEach((element) => {
     headTitle.innerHTML = `Fisheye - photographe : ${element.name}`;
+  });
+}
+
+/* printForm */
+
+function printForm(objects, wrapper) {
+  const mailForm = wrapper;
+  const hidenInputId = wrapper.querySelector('#id');
+  const hidenInputName = wrapper.querySelector('#name');
+  objects.forEach((element) => {
+    hidenInputId.setAttribute('value', `${element.id}`);
+    hidenInputName.setAttribute('value', `${element.name}`);
   });
 }
 
@@ -278,6 +291,9 @@ function printObjects(objects, type, wrapper) {
       break;
     case 'head':
       printHead(objects, wrapper);
+      break;
+    case 'form':
+      printForm(objects, wrapper);
       break;
     default:
   }
@@ -301,12 +317,12 @@ function setObserver(observee, modified, modificator) {
 get photographer by id and medias belonging to the photographer
 launches prints */
 
-async function displayDynamics(url, id) {
+async function displayDynamics(url, urlParams) {
   try {
     const response = await fetch(url);
     const objects = await response.json();
-    const photographersById = filterObjectsById(objects.photographers, id, 'id');
-    mediasByPhotogId = filterObjectsById(objects.media, id, 'photographerId');
+    const photographersById = filterObjectsById(objects.photographers, urlParams.id, 'id');
+    mediasByPhotogId = filterObjectsById(objects.media, urlParams.id, 'photographerId');
     const sortedMedias = sortObjectsById(mediasByPhotogId, 'likes');
     const summLikes = getSummOn(sortedMedias, 'likes');
     const widgetStats = {
@@ -317,8 +333,10 @@ async function displayDynamics(url, id) {
     const mediasWrapper = document.querySelector('.medias-wrapper');
     const widgetWrapper = document.querySelector('.stats-widget');
     const headTitle = document.querySelector('head > title');
+    const mailForm = document.querySelector('.contact-form');
     printObjects(photographersById, 'cards', cardsWrapper);
     printObjects(photographersById, 'head', headTitle);
+    printObjects(photographersById, 'form', mailForm);
     printObjects(sortedMedias, 'medias', mediasWrapper);
     printObjects(widgetStats, 'widget', widgetWrapper);
     const cardWrapper = document.querySelector('.card-wrapper');
@@ -344,15 +362,41 @@ function modifyClassAttrList(object, modifOption, atrr) {
   }
 }
 
+/* return an object with URL parameters */
+
+function getURLParams(urlSearchPar, params) {
+  const urlParamsObject = {};
+  params.forEach((param) => {
+    if (typeof (urlSearchPar.get(param)) !== 'undefined') {
+      urlParamsObject[param] = urlSearchPar.get(param);
+    }
+  });
+
+  return urlParamsObject;
+}
+
+/* displayFormResultConsole prints form inputs values after send */
+
+function displayFormResultConsole(urlParams, params) {
+  /* uses urlParams, an object with form values sent */
+  params.forEach((param) => {
+    if (Object.prototype.hasOwnProperty.call(urlParams, param)) {
+      console.log(urlParams[param]);
+    }
+  });
+}
+
 /* the primary runing function. all loading page routines are here */
 
 function run() {
   try {
     const queryStringUrlId = window.location.search;
     const searchParamsId = new URLSearchParams(queryStringUrlId);
-    photographerId = searchParamsId.get('id');
-    photographerName = searchParamsId.get('name');
-    displayDynamics('./db/photographers.json', photographerId);
+    const urlParams = getURLParams(searchParamsId, ['id', 'name', 'firstname', 'lastname', 'email', 'message']);
+    photographerId = urlParams.id;
+    photographerName = urlParams.name;
+    displayDynamics('./db/photographers.json', urlParams);
+    displayFormResultConsole(urlParams, ['firstname', 'lastname', 'email', 'message']);
   } catch (error) {
     alert(error.message);
   }
@@ -525,14 +569,25 @@ function onClose(event) {
   }
 }
 
-/* onSubForm */
+/* onSubForm only tests if inputs have text and prints in the console log
+if no error has been found . Else the form is not sent */
 
 function onSubForm(event) {
-  event.preventDefault();
+  const checkArray = [];
+  const valuesArray = [];
   const form = event.target;
   const inputs = form.querySelectorAll('input, textarea');
 
   inputs.forEach((input) => {
-    console.log(input.value);
+    if (input.value) {
+      checkArray.push(true);
+      valuesArray.push(input.value);
+    } else {
+      checkArray.push(false);
+    }
   });
+
+  if (checkArray.includes(false)) {
+    event.preventDefault();
+  }
 }

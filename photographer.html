@@ -74,15 +74,17 @@
                         onclick="return onClose(event)"
                         onkeydown="return   onClose(event)"></button>
                     </header>
-                    <form action="" class="contact-form" onsubmit="return onSubForm(event)">
+                    <form action="" class="contact-form" method="get" onsubmit="return onSubForm(event)">
+                        <input type="hidden" value="" id="id" name="id">
+                        <input type="hidden" value="" id="name" name="name">
                         <label for="First name" class="form-label">Prénom</label>
-                        <input type="text" id="First name" class="text-input" placeholder="Prénom">
+                        <input type="text" id="First name" name="firstname" class="text-input" placeholder="Prénom">
                         <label for="Last name" class="form-label">Nom</label>
-                        <input type="text"  id="Last name" class="text-input" placeholder="Nom">
+                        <input type="text"  id="Last name" name="lastname" class="text-input" placeholder="Nom">
                         <label for="Email" class="form-label">Email</label>
-                        <input type="email" id="Email" class="text-input" placeholder="E-mail">
+                        <input type="email" id="Email" class="text-input" name="email" placeholder="E-mail">
                         <label for="Your message" class="form-label">Votre message</label>
-                        <textarea id="Your message" class="text-aera"></textarea>
+                        <textarea id="Your message" class="text-aera" name="message"></textarea>
                         <button 
                         type="submit" 
                         class="submit-button">Envoyer</button>

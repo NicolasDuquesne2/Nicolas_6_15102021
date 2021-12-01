@@ -349,6 +349,7 @@ main {
     border-style: none;
     margin-bottom: 10px;
     font-size: 1em;
+    font-family: var(--font-default);
 }
 
 .text-aera {
@@ -359,6 +360,7 @@ main {
     font-size: 1em;
     resize: none;
     height: 184px;
+    font-family: var(--font-default);
 }
 
 .submit-button {
@@ -531,6 +533,7 @@ main {
         position:unset;
         padding: 15px 10px;
         font-size: 1em;
+        font-family: var(--font-default);
     }
 
     .modal-button.not-visible {
