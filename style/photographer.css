@@ -301,6 +301,10 @@ main {
     left: 0;
 }
 
+.dial-bg:focus {
+    outline: none;
+}
+
 .dial-wrapper {
     display: flex;
     flex-direction: column;
@@ -871,6 +875,47 @@ main {
         width: 0.9em;
         height: 0.9em;
         margin-left: 5px;
+    }
+    
+}
+
+@media screen and (min-width:2000px){
+
+    /* light box*/
+
+    .light-close {
+        height: 35px;
+        width: 35px;
+    }
+    
+    .form-close:after {
+        top: calc(50% - 1px);
+        left: 0;
+        right: 0;
+        height: 2px;;
+    }
+    .form-close:before {
+        left: calc(50% - 1px);
+        top: 0;
+        bottom: 0;
+        width: 2px; 
+    }
+
+    .prev-button, .next-button {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* a simple chevron*/
+    
+    .prev-button:after {
+        width: 25px; 
+        height: 25px; 
+    }
+    
+    .next-button::after {
+        width: 25px; 
+        height: 25px; 
     }
     
 }

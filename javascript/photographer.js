@@ -20,7 +20,14 @@ function sortObjectsById(objects, property) {
   let sortObjects = [];
 
   if (property === 'title') {
-    sortObjects = objects.sort((a, b) => a[property].localeCompare(b[property]));
+    const reg = /[0-9]+/g;
+    sortObjects = objects.sort((a, b) => {
+      const v0 = a[property].replace(reg, '');
+      const v0t = v0.trim();
+      const v1 = b[property].replace(reg, '');
+      const v1t = v1.trim();
+      return v0t.localeCompare(v1t);
+    });
   } else if (property === 'dates') {
     sortObjects = objects.sort((a, b) => new Date(b.date) - new Date(a.date));
   } else {
@@ -118,10 +125,11 @@ function createLightBox(object) {
 
       htmlObject += `<button 
         class="form-close light-close"
+        type="button"
         aria-label="Fermer dialogue"
         tabindex=0
         onclick="return onClose(event)"
-        onkeydown="return onClose(event)>"
+        onkeydown="return onClose(event)">
       </button>`;
 
       htmlObject += '</div>';
@@ -407,6 +415,24 @@ run();
 
 /* events functions */
 
+/* changelightmedia  called in left and right button action or in arrows key action */
+
+function changelightmedia(button) {
+  const mediaInDb = filterObjectsById([...mediasByPhotogId], button.id, 'id');
+  const attribute = {
+    type: 'index',
+    value: button.id,
+  };
+  const mediaAdjIndex = getContiguousId([...mediasByPhotogId], attribute);
+  const mediaPack = {
+    media: mediaInDb[0],
+    indexes: mediaAdjIndex,
+  };
+  const targetedWrapper = document.querySelector('.light-box');
+  printObjects(mediaPack, 'medias', targetedWrapper);
+  targetedWrapper.focus();
+}
+
 /* onTabInModal : intercepts tab focuses in modals
 in order to navigate in modals until modals are closed by user */
 
@@ -449,19 +475,38 @@ function openModal(event) {
   if (event.code === 'Enter' || event.type === 'click') {
     const modal = document.querySelector('.dial-bg');
     modifyClassAttrList(modal, 'remove', 'not-visible');
-    const firstName = modal.querySelector('input');
+    const firstName = modal.querySelector('.text-input');
     modal.addEventListener('keydown', onTabInModal, true);
     firstName.focus();
   }
 }
 
-/* closeByEsc */
+/* closeByEsc is not an event function.
+Only remove eventlistener and set not-visble attribute to the elemennt */
 
-function closeByEsc(event) {
-  if (event.code === 'Escape') {
-    const elementToClose = event.target;
-    elementToClose.removeEventListener('keydown', onTabInModal, true);
-    modifyClassAttrList(elementToClose, 'add', 'not-visible');
+function closeByEsc(target) {
+  const targ = target;
+  target.removeEventListener('keydown', onTabInModal, true);
+  modifyClassAttrList(target, 'add', 'not-visible');
+}
+
+/* onArrawsKey is not an event function.
+only select the right button according to the key code and launches the changemedia script */
+
+function onArrawsKey(key) {
+  let button = null;
+  const lightBox = document.querySelector('.light-box');
+  const keyDir = key;
+  if (keyDir === 'ArrowUp' || keyDir === 'ArrowLeft') {
+    button = lightBox.querySelector('.prev-button');
+  } else if (keyDir === 'ArrowDown' || keyDir === 'ArrowRight') {
+    button = lightBox.querySelector('.next-button');
+  } else {
+    throw new Error('Invald key. Expected Arrow up, Arrow down, Arrow left or Arrow right');
+  }
+
+  if (button != null) {
+    changelightmedia(button);
   }
 }
 
@@ -526,8 +571,7 @@ function onMediaSelect(event) {
     const targetedWrapper = document.querySelector('.light-box');
     const targetedWrapperBg = document.querySelector('.light-bg');
     printObjects(mediaPack, 'medias', targetedWrapper);
-    const butt = targetedWrapper.querySelector('button');
-    butt.focus();
+    targetedWrapper.focus();
     modifyClassAttrList(targetedWrapperBg, 'remove', 'not-visible');
     targetedWrapperBg.addEventListener('keydown', onTabInModal, true);
   }
@@ -540,25 +584,14 @@ function onlightButton(event) {
     event.preventDefault();
     event.stopPropagation();
     const button = event.target;
-    const mediaInDb = filterObjectsById([...mediasByPhotogId], button.id, 'id');
-    const attribute = {
-      type: 'index',
-      value: button.id,
-    };
-    const mediaAdjIndex = getContiguousId([...mediasByPhotogId], attribute);
-    const mediaPack = {
-      media: mediaInDb[0],
-      indexes: mediaAdjIndex,
-    };
-    const targetedWrapper = document.querySelector('.light-box');
-    printObjects(mediaPack, 'medias', targetedWrapper);
+    changelightmedia(button);
   }
 }
 
 /* onLightClose */
 
 function onClose(event) {
-  if (event.code === 'Enter' || event.type === 'click') {
+  if (event.code === 'Enter' || event.type === 'click' || event.code === 'Escape') {
     let wrapperbg = null;
     if (event.target.className === 'form-close light-close') {
       wrapperbg = document.querySelector('.light-bg');
@@ -590,5 +623,37 @@ function onSubForm(event) {
 
   if (checkArray.includes(false)) {
     event.preventDefault();
+  }
+}
+
+/* lightEventKeyDown intercepts all light keydown */
+
+function lightEventKeyDown(event) {
+  const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Escape'];
+  const keyTab = keys.filter((k) => k === event.code);
+  const key = keyTab[0];
+  const lightBg = document.querySelector('.light-bg');
+  if (key) {
+    if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight') {
+      event.preventDefault();
+      onArrawsKey(key);
+    } else if (key === 'Escape') {
+      closeByEsc(lightBg);
+    }
+  }
+}
+
+/* formEventKeyDown intecepts all form keydown and
+ launches right function according to the key code */
+
+function formEventKeyDown(event) {
+  const keys = ['Escape'];
+  const keyTab = keys.filter((k) => k === event.code);
+  const key = keyTab[0];
+  const formBg = document.querySelector('.dial-bg');
+  if (key) {
+    if (key === 'Escape') {
+      closeByEsc(formBg);
+    }
   }
 }

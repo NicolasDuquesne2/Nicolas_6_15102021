@@ -23,7 +23,7 @@
             </a>
         </header>
         <main>
-            <div class="light-bg not-visible">
+            <div class="light-bg not-visible" onkeydown="return lightEventKeyDown(event)">
                 <div class="light-box" tabindex="0"></div>
             </div>
             <div class="card-wrapper">
@@ -63,7 +63,7 @@
             </div>
             <div class="medias-wrapper"></div>
             <div class="stats-widget"></div>
-            <div class="dial-bg not-visible" tabindex=0 onkeydown="return closeByEsc(event)">
+            <div class="dial-bg not-visible" tabindex=0 onkeydown="return formEventKeyDown(event)">
                 <dialog class="dial-wrapper" role="Dialog">
                     <header class="form-header">
                         <h1 class="form-title">Contactez-moi Mimi keel</h1>
@@ -72,7 +72,7 @@
                         type="button"
                         aria-label="Fermer dialogue"
                         onclick="return onClose(event)"
-                        onkeydown="return   onClose(event)"></button>
+                        onkeydown="return onClose(event)"></button>
                     </header>
                     <form action="" class="contact-form" method="get" onsubmit="return onSubForm(event)">
                         <input type="hidden" value="" id="id" name="id">
@@ -87,7 +87,7 @@
                         <textarea id="Your message" class="text-aera" name="message"></textarea>
                         <button 
                         type="submit" 
-                        class="submit-button">Envoyer</button>
+                        class="submit-button" onkeydown="return closeByEsc(event)">Envoyer</button>
                     </form>
                 </dialog>
             </div>
